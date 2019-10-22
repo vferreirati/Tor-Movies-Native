@@ -3,6 +3,6 @@ package com.vferreirati.tormovies.network.model
 import com.squareup.moshi.Json
 
 data class LanguageWrapperModel(
-    @Json(name = "1080p") val fullHdTorrent: TorrentModel?,
-    @Json(name = "720p") val hdTorrent: TorrentModel?
+    @field:Json(name = "1080p") val fullHdTorrent: TorrentModel?,
+    @field:Json(name = "720p") val hdTorrent: TorrentModel?
 )
