@@ -19,16 +19,6 @@ object NetworkModule {
 
     @Provides
     @ApplicationScope
-    fun moshiConverterFactory(moshi: Moshi): MoshiConverterFactory = MoshiConverterFactory.create(moshi)
-
-    @Provides
-    @ApplicationScope
-    fun moshi(): Moshi = Moshi.Builder()
-        .add(KotlinJsonAdapterFactory())
-        .build()
-
-    @Provides
-    @ApplicationScope
     fun okHttpClient(
         networkInterceptor: HttpLoggingInterceptor,
         cache: Cache
