@@ -38,24 +38,24 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     // Dagger 2
-    api 'com.google.dagger:dagger:2.24'
-    kapt 'com.google.dagger:dagger-compiler:2.24'
+    api 'com.google.dagger:dagger:2.25.2'
+    kapt 'com.google.dagger:dagger-compiler:2.25.2'
 
     // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
-    implementation 'com.squareup.retrofit2:converter-moshi:2.6.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:converter-moshi:2.6.2'
 
     // HttpLoggingInterceptor
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
 
     // ViewModel & LiveData
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     kapt 'androidx.lifecycle:lifecycle-compiler:2.1.0'
 
     // Room
-    implementation 'androidx.room:room-runtime:2.2.0'
-    implementation 'androidx.room:room-ktx:2.2.0'
-    kapt 'androidx.room:room-compiler:2.2.0'
+    implementation 'androidx.room:room-runtime:2.2.1'
+    implementation 'androidx.room:room-ktx:2.2.1'
+    kapt 'androidx.room:room-compiler:2.2.1'
 
     // Navigation
     implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0'
@@ -63,4 +63,17 @@ dependencies {
 
     // Material
     implementation 'com.google.android.material:material:1.0.0'
+
+    // Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    // Extensões Fragment e Activity
+    implementation 'androidx.activity:activity-ktx:1.0.0'
+    implementation 'androidx.fragment:fragment-ktx:1.1.0'
+
+    // Shimmer
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    // Moshi
+    implementation 'com.squareup.moshi:moshi-kotlin:1.8.0'
 }
