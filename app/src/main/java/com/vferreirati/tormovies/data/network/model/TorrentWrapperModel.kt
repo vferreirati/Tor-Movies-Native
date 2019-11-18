@@ -1,4 +1,4 @@
-package com.vferreirati.tormovies.network.model
+package com.vferreirati.tormovies.data.network.model
 
 import com.squareup.moshi.Json
 

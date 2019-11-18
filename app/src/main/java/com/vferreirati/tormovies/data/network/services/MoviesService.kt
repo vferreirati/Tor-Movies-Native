@@ -1,6 +1,6 @@
-package com.vferreirati.tormovies.network.services
+package com.vferreirati.tormovies.data.network.services
 
-import com.vferreirati.tormovies.network.model.TorrentEntryModel
+import com.vferreirati.tormovies.data.network.model.TorrentEntryModel
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

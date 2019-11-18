@@ -3,7 +3,7 @@ package com.vferreirati.tormovies.di.modules
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.vferreirati.tormovies.di.scopes.ApplicationScope
-import com.vferreirati.tormovies.network.services.MoviesService
+import com.vferreirati.tormovies.data.network.services.MoviesService
 import com.vferreirati.tormovies.utils.API_URL
 import dagger.Module
 import dagger.Provides

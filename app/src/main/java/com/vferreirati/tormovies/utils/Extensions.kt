@@ -1,4 +1,4 @@
-package com.vferreirati.tormovies.extensions
+package com.vferreirati.tormovies.utils
 
 import android.app.Activity
 import androidx.activity.viewModels
