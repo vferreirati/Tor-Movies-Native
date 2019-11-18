@@ -1,7 +1,8 @@
-package com.vferreirati.tormovies
+package com.vferreirati.tormovies.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.vferreirati.tormovies.R
 
 class MainActivity : AppCompatActivity() {
 
