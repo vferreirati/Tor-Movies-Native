@@ -9,5 +9,6 @@ data class MovieEntry(
     val youtubeTrailerUrl: String?,
     val genres: List<String>,
     val images: MovieImages,
-    val torrents: List<MovieTorrent>
+    val fullHdTorrent: MovieTorrent?,
+    val hdTorrent: MovieTorrent?
 )

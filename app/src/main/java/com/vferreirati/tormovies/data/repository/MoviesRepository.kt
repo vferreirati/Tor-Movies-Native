@@ -1,5 +1,6 @@
 package com.vferreirati.tormovies.data.repository
 
+import com.vferreirati.tormovies.data.network.model.TorrentModel
 import com.vferreirati.tormovies.data.network.services.MoviesService
 import com.vferreirati.tormovies.data.presentation.MovieEntry
 import com.vferreirati.tormovies.data.presentation.MovieImages
@@ -25,7 +26,19 @@ class MoviesRepository @Inject constructor(
                 bannerUrl = entry.images.bannerUrl,
                 fanArtUrl = entry.images.fanArtUrl
             ),
-            torrents = emptyList() // TODO: Map this field
+            fullHdTorrent = entry.torrents.englishTorrents.fullHdTorrent?.let { tor -> mapTorrentToDomain(tor, "1080p") },
+            hdTorrent = entry.torrents.englishTorrents.hdTorrent?.let { tor -> mapTorrentToDomain(tor, "720p") }
         ) }.toList()
+    }
+
+    private fun mapTorrentToDomain(tor: TorrentModel, quality: String): MovieTorrent {
+        return MovieTorrent(
+            quality = quality,
+            fileSize = tor.fileSize,
+            magneticUrl = tor.magneticUrl,
+            peerCount = tor.peers,
+            seedCount = tor.seeders,
+            source = tor.source
+        )
     }
 }
