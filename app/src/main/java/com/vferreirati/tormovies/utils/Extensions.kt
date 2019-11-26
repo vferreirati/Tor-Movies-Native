@@ -14,6 +14,8 @@ import com.vferreirati.tormovies.TorApplication
  * */
 val Activity.injector get() = (application as TorApplication).applicationComponent
 
+val Fragment.activityInjector get() = activity!!.injector
+
 /**
  * Método de entexão para obter o [ViewModel] com escopo de [Activity] através de DI
  * */
@@ -30,7 +32,7 @@ inline fun <reified T : ViewModel> FragmentActivity.viewModel(
  * Método de entexão para obter determinado [ViewModel] com escopo de [Fragment] através de DI
  * */
 @Suppress("UNCHECKED_CAST")
-inline fun <reified T : ViewModel> Fragment.viewmodel(
+inline fun <reified T : ViewModel> Fragment.viewModel(
     crossinline provider: () -> T
 ) = viewModels<T> {
     object: ViewModelProvider.Factory {

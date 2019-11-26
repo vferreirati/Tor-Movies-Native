@@ -1,5 +1,6 @@
 package com.vferreirati.tormovies.data.repository
 
+import com.vferreirati.tormovies.data.network.model.TorrentEntryModel
 import com.vferreirati.tormovies.data.network.model.TorrentModel
 import com.vferreirati.tormovies.data.network.services.MoviesService
 import com.vferreirati.tormovies.data.presentation.MovieEntry
@@ -11,9 +12,23 @@ class MoviesRepository @Inject constructor(
     private val moviesService: MoviesService
 ) {
 
-    suspend fun queryMovies(): List<MovieEntry> {
-        val response = moviesService.queryMovies()
-        return response.map { entry -> MovieEntry(
+    suspend fun queryMovies(
+        sortBy: String,
+        page: Int = 1,
+        keywords: String? = null,
+        genre: String? = null
+    ): List<MovieEntry> {
+        val response = moviesService.queryMovies(
+            sortBy = sortBy,
+            page = page,
+            query = keywords,
+            genre = genre
+        )
+        return response.map { entry -> mapMovieToDomain(entry) }.toList()
+    }
+
+    private fun mapMovieToDomain(entry: TorrentEntryModel): MovieEntry {
+        return MovieEntry(
             id = entry.id,
             title = entry.title,
             durationInMinutes = entry.durationInMinutes,
@@ -26,9 +41,19 @@ class MoviesRepository @Inject constructor(
                 bannerUrl = entry.images.bannerUrl,
                 fanArtUrl = entry.images.fanArtUrl
             ),
-            fullHdTorrent = entry.torrents.englishTorrents.fullHdTorrent?.let { tor -> mapTorrentToDomain(tor, "1080p") },
-            hdTorrent = entry.torrents.englishTorrents.hdTorrent?.let { tor -> mapTorrentToDomain(tor, "720p") }
-        ) }.toList()
+            fullHdTorrent = entry.torrents.englishTorrents?.fullHdTorrent?.let { tor ->
+                mapTorrentToDomain(
+                    tor,
+                    "1080p"
+                )
+            },
+            hdTorrent = entry.torrents.englishTorrents?.hdTorrent?.let { tor ->
+                mapTorrentToDomain(
+                    tor,
+                    "720p"
+                )
+            }
+        )
     }
 
     private fun mapTorrentToDomain(tor: TorrentModel, quality: String): MovieTorrent {

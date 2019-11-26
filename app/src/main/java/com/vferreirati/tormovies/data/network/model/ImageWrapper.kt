@@ -3,7 +3,7 @@ package com.vferreirati.tormovies.data.network.model
 import com.squareup.moshi.Json
 
 data class ImageWrapper(
-    @field:Json(name = "poster") val posterUrl: String?,
-    @field:Json(name = "fanart") val fanArtUrl: String?,
-    @field:Json(name = "banner") val bannerUrl: String?
+    @Json(name = "poster") val posterUrl: String?,
+    @Json(name = "fanart") val fanArtUrl: String?,
+    @Json(name = "banner") val bannerUrl: String?
 )
