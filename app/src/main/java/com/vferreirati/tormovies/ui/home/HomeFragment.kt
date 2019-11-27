@@ -8,11 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
 
 import com.vferreirati.tormovies.R
 import com.vferreirati.tormovies.data.presentation.MovieEntry
 import com.vferreirati.tormovies.utils.activityInjector
 import com.vferreirati.tormovies.utils.viewModel
+import kotlinx.android.synthetic.main.fragment_home.*
 
 
 class HomeFragment : Fragment() {
@@ -30,7 +32,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.homeState.observe(viewLifecycleOwner, Observer {  state -> mapStateToUi(state)})
+        viewModel.homeState.observe(viewLifecycleOwner, Observer {  state -> mapStateToUi(state) })
     }
 
     private fun mapStateToUi(state: HomeState) = when(state) {
@@ -43,9 +45,7 @@ class HomeFragment : Fragment() {
         Log.e("Victor", "Loading")
     }
 
-    private fun onError(errorMessage: String) {
-        Log.e("Victor", "error loading movies: $errorMessage!")
-    }
+    private fun onError(errorMessage: String) = Snackbar.make(rootLL, errorMessage, Snackbar.LENGTH_LONG).show()
 
     private fun showMovies(trendingMovies: List<MovieEntry>, mostRecentMovies: List<MovieEntry>) {
         Log.e("Victor", "Movies loaded!")

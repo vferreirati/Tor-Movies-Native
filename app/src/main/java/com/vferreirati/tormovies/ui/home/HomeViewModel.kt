@@ -19,19 +19,17 @@ class HomeViewModel @Inject constructor(
     init { loadMovies() }
 
     private fun loadMovies() {
-        try {
-            _homeState.postValue(LoadingMovies)
-
-            viewModelScope.launch {
+        viewModelScope.launch {
+            try {
+                _homeState.postValue(LoadingMovies)
                 val trendingMovies = moviesRepository.queryMovies(sortBy = "trending")
                 val mostRecent = moviesRepository.queryMovies(sortBy = "last added")
 
                 _homeState.postValue(MoviesLoaded(trendingMovies = trendingMovies, mostRecentMovies = mostRecent))
+            } catch (t: Throwable) {
+                t.printStackTrace()
+                _homeState.postValue(ErrorLoadingMovies("Check your internet connection"))
             }
-
-        } catch (t: Throwable) {
-            t.printStackTrace()
-            _homeState.postValue(ErrorLoadingMovies("Check your internet connection"))
         }
     }
 }
