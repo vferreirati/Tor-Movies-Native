@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Tor Movies</string>
+    <string name="hello_what_do_you_want_to_watch">Hello, what do you want to watch?</string>
+    <string name="search">Search</string>
 </resources>
