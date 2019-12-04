@@ -33,9 +33,9 @@
             app:hintEnabled="false">
 
             <com.google.android.material.textfield.TextInputEditText
+                style="@style/SearchbarTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/SearchbarTheme"
                 android:hint="@string/search"
                 android:padding="8dp"
                 tools:text="Deadpool" />
@@ -47,7 +47,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_movies_categories">
+        android:background="@drawable/background_movies_categories"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listTrendingMovies"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            tools:listitem="@layout/item_list_movie" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listNewMovies"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:paddingStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
+            tools:listitem="@layout/item_list_movie" />
 
     </LinearLayout>
 

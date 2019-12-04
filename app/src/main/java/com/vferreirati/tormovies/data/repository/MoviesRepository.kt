@@ -37,9 +37,9 @@ class MoviesRepository @Inject constructor(
             year = entry.releaseYear,
             youtubeTrailerUrl = entry.youtubeTrailerUrl,
             images = MovieImages(
-                posterUrl = entry.images.posterUrl,
-                bannerUrl = entry.images.bannerUrl,
-                fanArtUrl = entry.images.fanArtUrl
+                posterUrl = entry.images.posterUrl?.replace("http://", "https://"),
+                bannerUrl = entry.images.bannerUrl?.replace("http://", "https://"),
+                fanArtUrl = entry.images.fanArtUrl?.replace("http://", "https://")
             ),
             fullHdTorrent = entry.torrents.englishTorrents?.fullHdTorrent?.let { tor ->
                 mapTorrentToDomain(

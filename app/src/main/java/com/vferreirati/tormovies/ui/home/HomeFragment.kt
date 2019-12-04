@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 
 import com.vferreirati.tormovies.R
@@ -20,6 +21,8 @@ import kotlinx.android.synthetic.main.fragment_home.*
 class HomeFragment : Fragment() {
 
     private val viewModel by viewModel { activityInjector.homeViewModel }
+    private val adapterTrendingMovies by lazy { activityInjector.movieAdapter }
+    private val adapterNewMovies by lazy { activityInjector.movieAdapter }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,8 +32,8 @@ class HomeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
         viewModel.homeState.observe(viewLifecycleOwner, Observer {  state -> mapStateToUi(state) })
     }
@@ -48,6 +51,8 @@ class HomeFragment : Fragment() {
     private fun onError(errorMessage: String) = Snackbar.make(rootLL, errorMessage, Snackbar.LENGTH_LONG).show()
 
     private fun showMovies(trendingMovies: List<MovieEntry>, mostRecentMovies: List<MovieEntry>) {
-        Log.e("Victor", "Movies loaded!")
+        listTrendingMovies.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        listTrendingMovies.adapter = adapterNewMovies
+        adapterNewMovies.addEntries(trendingMovies)
     }
 }
