@@ -6,6 +6,13 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:fontFamily">@font/nunito</item>
+    </style>
+
+    <style name="HeaderTextTheme" parent="AppTheme">
+        <item name="android:textSize">@dimen/header_text_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="SearchbarTheme" parent="AppTheme">
@@ -16,6 +23,18 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:singleLine">true</item>
         <item name="android:capitalize">sentences</item>
+    </style>
+
+    <style name="CategoryHeaderTheme" parent="AppTheme">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/category_header_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="SeeCategoryMoviesButtonTheme" parent="AppTheme">
+        <item name="android:textColor">@android:color/darker_gray</item>
+        <item name="android:textSize">@dimen/category_header_text_size</item>
     </style>
 
 </resources>

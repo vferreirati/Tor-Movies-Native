@@ -52,7 +52,11 @@ class HomeFragment : Fragment() {
 
     private fun showMovies(trendingMovies: List<MovieEntry>, mostRecentMovies: List<MovieEntry>) {
         listTrendingMovies.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        listTrendingMovies.adapter = adapterNewMovies
-        adapterNewMovies.addEntries(trendingMovies)
+        listTrendingMovies.adapter = adapterTrendingMovies
+        adapterTrendingMovies.addEntries(trendingMovies)
+
+        listNewMovies.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        listNewMovies.adapter = adapterNewMovies
+        adapterNewMovies.addEntries(mostRecentMovies)
     }
 }

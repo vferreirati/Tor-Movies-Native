@@ -3,4 +3,7 @@
     <string name="hello_what_do_you_want_to_watch">Hello, what do you want to watch?</string>
     <string name="search">Search</string>
     <string name="description_movie_poster">Movies poster image</string>
+    <string name="trending_movies">Trending movies</string>
+    <string name="see_all">See all</string>
+    <string name="most_recent">Most recent</string>
 </resources>
