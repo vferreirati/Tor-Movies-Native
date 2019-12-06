@@ -2,7 +2,6 @@ package com.vferreirati.tormovies.ui.home
 
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,16 +13,16 @@ import com.google.android.material.snackbar.Snackbar
 import com.vferreirati.tormovies.R
 import com.vferreirati.tormovies.data.presentation.MovieEntry
 import com.vferreirati.tormovies.ui.adapter.ShimmerAdapter
-import com.vferreirati.tormovies.utils.activityInjector
+import com.vferreirati.tormovies.utils.injector
 import com.vferreirati.tormovies.utils.viewModel
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
 class HomeFragment : Fragment() {
 
-    private val viewModel by viewModel { activityInjector.homeViewModel }
-    private val adapterTrendingMovies by lazy { activityInjector.movieAdapter }
-    private val adapterNewMovies by lazy { activityInjector.movieAdapter }
+    private val viewModel by viewModel { injector.homeViewModel }
+    private val adapterTrendingMovies by lazy { injector.movieAdapter }
+    private val adapterNewMovies by lazy { injector.movieAdapter }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

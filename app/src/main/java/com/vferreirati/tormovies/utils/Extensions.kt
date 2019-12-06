@@ -14,7 +14,7 @@ import com.vferreirati.tormovies.TorApplication
  * */
 val Activity.injector get() = (application as TorApplication).applicationComponent
 
-val Fragment.activityInjector get() = activity!!.injector
+val Fragment.injector get() = activity!!.injector
 
 /**
  * Método de entexão para obter o [ViewModel] com escopo de [Activity] através de DI
