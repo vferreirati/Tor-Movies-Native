@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 
 import com.vferreirati.tormovies.R
 import com.vferreirati.tormovies.data.presentation.MovieEntry
+import com.vferreirati.tormovies.ui.adapter.ShimmerAdapter
 import com.vferreirati.tormovies.utils.activityInjector
 import com.vferreirati.tormovies.utils.viewModel
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -45,17 +46,22 @@ class HomeFragment : Fragment() {
     }
 
     private fun showLoadingIndicator() {
-        Log.e("Victor", "Loading")
+        val adapterTrending = ShimmerAdapter(R.layout.list_shimmer_item, 10)
+        val adapterRecent = ShimmerAdapter(R.layout.list_shimmer_item, 10)
+
+        listTrendingMovies.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        listTrendingMovies.adapter = adapterTrending
+
+        listNewMovies.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        listNewMovies.adapter = adapterRecent
     }
 
     private fun onError(errorMessage: String) = Snackbar.make(rootLL, errorMessage, Snackbar.LENGTH_LONG).show()
 
     private fun showMovies(trendingMovies: List<MovieEntry>, mostRecentMovies: List<MovieEntry>) {
-        listTrendingMovies.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         listTrendingMovies.adapter = adapterTrendingMovies
         adapterTrendingMovies.addEntries(trendingMovies)
 
-        listNewMovies.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         listNewMovies.adapter = adapterNewMovies
         adapterNewMovies.addEntries(mostRecentMovies)
     }

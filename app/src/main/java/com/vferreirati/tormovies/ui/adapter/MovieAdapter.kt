@@ -34,7 +34,10 @@ class MovieAdapter @Inject constructor(
 
         fun bind(entry: MovieEntry) {
             txtMovieTitle.text = entry.title
-            entry.images.posterUrl?.let { url -> picasso.load(url).into(imgMoviePoster) }
+            entry.images.posterUrl?.let { url -> picasso.load(url)
+                .placeholder(R.drawable.placeholder_movie_poster)
+                .into(imgMoviePoster)
+            }
         }
     }
 }
