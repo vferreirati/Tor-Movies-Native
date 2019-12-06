@@ -32,12 +32,6 @@
             android:layout_marginTop="10dp"
             android:background="@color/shimmerHighLightColor" />
 
-        <FrameLayout
-            android:layout_width="120dp"
-            android:layout_height="15dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/shimmerHighLightColor" />
-
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </com.facebook.shimmer.ShimmerFrameLayout>
