@@ -16,6 +16,7 @@ class MovieAdapter @Inject constructor(
 ) : RecyclerView.Adapter<MovieAdapter.MovieHolder>() {
 
     private val entries = mutableListOf<MovieEntry>()
+    private lateinit var callback: MovieCallback
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_list_movie, parent, false)
@@ -28,6 +29,10 @@ class MovieAdapter @Inject constructor(
 
     fun addEntries(newEntries: List<MovieEntry>) = entries.addAll(newEntries).also { notifyDataSetChanged() }
 
+    fun setCallback(callback: MovieCallback) {
+        this.callback = callback
+    }
+
     inner class MovieHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val imgMoviePoster: AppCompatImageView = itemView.findViewById(R.id.imgMoviePoster)
         private val txtMovieTitle: AppCompatTextView = itemView.findViewById(R.id.txtMovieName)
@@ -38,6 +43,11 @@ class MovieAdapter @Inject constructor(
                 .placeholder(R.drawable.placeholder_movie_poster)
                 .into(imgMoviePoster)
             }
+            itemView.setOnClickListener { callback.onMovieSelected(entry) }
         }
+    }
+
+    interface MovieCallback {
+        fun onMovieSelected(movieEntry: MovieEntry)
     }
 }

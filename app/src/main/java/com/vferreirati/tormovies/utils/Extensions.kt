@@ -1,6 +1,7 @@
 package com.vferreirati.tormovies.utils
 
 import android.app.Activity
+import android.view.View
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -38,4 +39,12 @@ inline fun <reified T : ViewModel> Fragment.viewModel(
     object: ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T = provider() as T
     }
+}
+
+fun View.gone() {
+    this.visibility = View.GONE
+}
+
+fun View.visible() {
+    this.visibility = View.VISIBLE
 }

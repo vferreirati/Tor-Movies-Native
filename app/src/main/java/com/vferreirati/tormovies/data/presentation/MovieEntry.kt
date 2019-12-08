@@ -1,5 +1,9 @@
 package com.vferreirati.tormovies.data.presentation
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class MovieEntry(
     val id: String?,
     val title: String,
@@ -11,4 +15,4 @@ data class MovieEntry(
     val images: MovieImages,
     val fullHdTorrent: MovieTorrent?,
     val hdTorrent: MovieTorrent?
-)
+): Parcelable
