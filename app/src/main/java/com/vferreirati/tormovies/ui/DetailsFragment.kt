@@ -30,6 +30,10 @@ class DetailsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        initUi()
+    }
+
+    private fun initUi() {
         val movie = args.movieEntry
 
         movie.images.bannerUrl?.let { url ->
@@ -38,11 +42,32 @@ class DetailsFragment : Fragment() {
 
         btnUp.setOnClickListener { findNavController().navigateUp() }
 
-        if(movie.youtubeTrailerUrl != null) {
+        if (movie.youtubeTrailerUrl != null) {
             btnYoutube.visible()
-            btnYoutube.setOnClickListener { startActivity(Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(movie.youtubeTrailerUrl) }) }
+            btnYoutube.setOnClickListener {
+                startActivity(Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse(movie.youtubeTrailerUrl)
+                })
+            }
         } else {
             btnYoutube.gone()
         }
+
+        txtMovieName.text = movie.title
+        txtMovieSynopsis.text = movie.synopsis
+        if(movie.durationInMinutes != null) {
+            txtMovieDuration.text = getString(R.string.duration_with_minutes, movie.durationInMinutes)
+        } else {
+            txtMovieDuration.text = getString(R.string.not_available)
+        }
+
+        txtMovieReleaseYear.text = movie.year ?: getString(R.string.not_available)
+        val genresBuilder = StringBuilder()
+        movie.genres.forEachIndexed { index, s ->
+            genresBuilder.append(s)
+            if(index != movie.genres.size - 1)
+                genresBuilder.append(", ")
+        }
+        txtMovieGenres.text = genresBuilder.toString()
     }
 }

@@ -37,4 +37,20 @@
         <item name="android:textSize">@dimen/category_header_text_size</item>
     </style>
 
+    <style name="MovieTitleTheme" parent="AppTheme">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MovieSynopsis">
+        <item name="android:textColor">@android:color/darker_gray</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="MovieInfoLabel" parent="MovieSynopsis">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>
