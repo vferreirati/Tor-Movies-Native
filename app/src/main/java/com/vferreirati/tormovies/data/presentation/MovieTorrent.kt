@@ -1,4 +1,4 @@
-package com.vferreirati.tormovies.data.presentation.models
+package com.vferreirati.tormovies.data.presentation
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

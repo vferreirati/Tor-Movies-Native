@@ -13,4 +13,9 @@
     <string name="release_year">Release year</string>
     <string name="not_available">Not available</string>
     <string name="duration_with_minutes">%s minutes</string>
+    <string name="choose_quality">Choose quality</string>
+    <string name="seed">Seed:</string>
+    <string name="peer">Peer:</string>
+    <string name="source">Source:</string>
+    <string name="file_size">File size:</string>
 </resources>

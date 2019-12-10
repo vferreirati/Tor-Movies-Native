@@ -3,9 +3,9 @@ package com.vferreirati.tormovies.data.repository
 import com.vferreirati.tormovies.data.network.model.TorrentEntryModel
 import com.vferreirati.tormovies.data.network.model.TorrentModel
 import com.vferreirati.tormovies.data.network.services.MoviesService
-import com.vferreirati.tormovies.data.presentation.models.MovieEntry
-import com.vferreirati.tormovies.data.presentation.models.MovieImages
-import com.vferreirati.tormovies.data.presentation.models.MovieTorrent
+import com.vferreirati.tormovies.data.presentation.MovieEntry
+import com.vferreirati.tormovies.data.presentation.MovieImages
+import com.vferreirati.tormovies.data.presentation.MovieTorrent
 import javax.inject.Inject
 
 class MoviesRepository @Inject constructor(

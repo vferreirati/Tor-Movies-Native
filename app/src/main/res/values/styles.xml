@@ -53,4 +53,13 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="DialogHeaderTextTheme" parent="HeaderTextTheme">
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="TorrentInfoLabel" parent="MovieInfoLabel">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>

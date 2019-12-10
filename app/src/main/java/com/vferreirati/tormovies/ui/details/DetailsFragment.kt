@@ -11,7 +11,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 
 import com.vferreirati.tormovies.R
-import com.vferreirati.tormovies.ui.DetailsFragmentArgs
+import com.vferreirati.tormovies.data.presentation.MovieTorrent
+import com.vferreirati.tormovies.ui.dialog.SelectQualityDialog
 import com.vferreirati.tormovies.utils.gone
 import com.vferreirati.tormovies.utils.injector
 import com.vferreirati.tormovies.utils.visible
@@ -56,6 +57,8 @@ class DetailsFragment : Fragment() {
 
         txtMovieName.text = movie.title
         txtMovieSynopsis.text = movie.synopsis
+        txtMovieReleaseYear.text = movie.year ?: getString(R.string.not_available)
+
         if(movie.durationInMinutes != null) {
             txtMovieDuration.text = getString(R.string.duration_with_minutes, movie.durationInMinutes)
         } else {
@@ -70,5 +73,16 @@ class DetailsFragment : Fragment() {
                 genresBuilder.append(", ")
         }
         txtMovieGenres.text = genresBuilder.toString()
+
+        btnDownload.setOnClickListener { onDownloadTorrent() }
+    }
+
+    private fun onDownloadTorrent() {
+        val movie = args.movieEntry
+        val torrentList = mutableListOf<MovieTorrent>()
+        movie.hdTorrent?.let { torrentList.add(it) }
+        movie.fullHdTorrent?.let { torrentList.add(it) }
+
+        SelectQualityDialog(torrentList).show(activity!!.supportFragmentManager, "SelectQualityDialog")
     }
 }
