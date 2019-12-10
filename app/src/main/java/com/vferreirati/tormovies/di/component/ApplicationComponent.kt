@@ -1,6 +1,7 @@
 package com.vferreirati.tormovies.di.component
 
 import android.content.Context
+import com.squareup.picasso.Picasso
 import com.vferreirati.tormovies.di.modules.ImageModule
 import com.vferreirati.tormovies.di.modules.RemoteModule
 import com.vferreirati.tormovies.di.scopes.ApplicationScope
@@ -20,4 +21,6 @@ interface ApplicationComponent {
 
     val homeViewModel: HomeViewModel
     val movieAdapter: MovieAdapter
+
+    val picasso: Picasso
 }

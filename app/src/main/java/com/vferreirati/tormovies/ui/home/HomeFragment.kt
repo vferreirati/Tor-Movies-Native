@@ -7,18 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 
 import com.vferreirati.tormovies.R
 import com.vferreirati.tormovies.data.presentation.MovieEntry
+import com.vferreirati.tormovies.ui.adapter.MovieAdapter
 import com.vferreirati.tormovies.ui.adapter.ShimmerAdapter
 import com.vferreirati.tormovies.utils.injector
 import com.vferreirati.tormovies.utils.viewModel
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), MovieAdapter.MovieCallback {
 
     private val viewModel by viewModel { injector.homeViewModel }
     private val adapterTrendingMovies by lazy { injector.movieAdapter }
@@ -35,6 +37,8 @@ class HomeFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        adapterTrendingMovies.setCallback(this)
+        adapterNewMovies.setCallback(this)
         viewModel.homeState.observe(viewLifecycleOwner, Observer {  state -> mapStateToUi(state) })
     }
 
@@ -59,9 +63,13 @@ class HomeFragment : Fragment() {
 
     private fun showMovies(trendingMovies: List<MovieEntry>, mostRecentMovies: List<MovieEntry>) {
         listTrendingMovies.adapter = adapterTrendingMovies
-        adapterTrendingMovies.addEntries(trendingMovies)
+        adapterTrendingMovies.setEntries(trendingMovies)
 
         listNewMovies.adapter = adapterNewMovies
-        adapterNewMovies.addEntries(mostRecentMovies)
+        adapterNewMovies.setEntries(mostRecentMovies)
+    }
+
+    override fun onMovieSelected(movieEntry: MovieEntry) {
+        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToDetailsFragment(movieEntry))
     }
 }

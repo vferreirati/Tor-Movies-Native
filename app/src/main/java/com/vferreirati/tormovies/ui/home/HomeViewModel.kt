@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vferreirati.tormovies.data.presentation.MovieEntry
 import com.vferreirati.tormovies.data.repository.MoviesRepository
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

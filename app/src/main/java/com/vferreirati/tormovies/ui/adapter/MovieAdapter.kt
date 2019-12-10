@@ -15,18 +15,26 @@ class MovieAdapter @Inject constructor(
     private val picasso: Picasso
 ) : RecyclerView.Adapter<MovieAdapter.MovieHolder>() {
 
-    private val entries = mutableListOf<MovieEntry>()
+    private var entries: List<MovieEntry>? = null
+    private lateinit var callback: MovieCallback
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_list_movie, parent, false)
         return MovieHolder(view)
     }
 
-    override fun getItemCount(): Int = entries.size
+    override fun getItemCount(): Int = entries?.size ?: 0
 
-    override fun onBindViewHolder(holder: MovieHolder, position: Int) = holder.bind(entries[position])
+    override fun onBindViewHolder(holder: MovieHolder, position: Int) = holder.bind(entries!![position])
 
-    fun addEntries(newEntries: List<MovieEntry>) = entries.addAll(newEntries).also { notifyDataSetChanged() }
+    fun setEntries(newEntries: List<MovieEntry>) {
+        entries = newEntries
+        notifyDataSetChanged()
+    }
+
+    fun setCallback(callback: MovieCallback) {
+        this.callback = callback
+    }
 
     inner class MovieHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val imgMoviePoster: AppCompatImageView = itemView.findViewById(R.id.imgMoviePoster)
@@ -38,6 +46,11 @@ class MovieAdapter @Inject constructor(
                 .placeholder(R.drawable.placeholder_movie_poster)
                 .into(imgMoviePoster)
             }
+            itemView.setOnClickListener { callback.onMovieSelected(entry) }
         }
+    }
+
+    interface MovieCallback {
+        fun onMovieSelected(movieEntry: MovieEntry)
     }
 }
