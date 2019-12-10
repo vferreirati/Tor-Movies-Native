@@ -63,10 +63,10 @@ class HomeFragment : Fragment(), MovieAdapter.MovieCallback {
 
     private fun showMovies(trendingMovies: List<MovieEntry>, mostRecentMovies: List<MovieEntry>) {
         listTrendingMovies.adapter = adapterTrendingMovies
-        adapterTrendingMovies.addEntries(trendingMovies)
+        adapterTrendingMovies.setEntries(trendingMovies)
 
         listNewMovies.adapter = adapterNewMovies
-        adapterNewMovies.addEntries(mostRecentMovies)
+        adapterNewMovies.setEntries(mostRecentMovies)
     }
 
     override fun onMovieSelected(movieEntry: MovieEntry) {
