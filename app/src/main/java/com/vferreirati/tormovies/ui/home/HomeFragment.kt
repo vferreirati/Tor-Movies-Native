@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 
 import com.vferreirati.tormovies.R
-import com.vferreirati.tormovies.data.presentation.MovieEntry
+import com.vferreirati.tormovies.data.presentation.models.MovieEntry
 import com.vferreirati.tormovies.ui.adapter.MovieAdapter
 import com.vferreirati.tormovies.ui.adapter.ShimmerAdapter
 import com.vferreirati.tormovies.utils.injector

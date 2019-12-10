@@ -8,7 +8,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.vferreirati.tormovies.R
-import com.vferreirati.tormovies.data.presentation.MovieEntry
+import com.vferreirati.tormovies.data.presentation.models.MovieEntry
 import javax.inject.Inject
 
 class MovieAdapter @Inject constructor(

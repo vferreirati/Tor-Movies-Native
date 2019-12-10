@@ -1,4 +1,4 @@
-package com.vferreirati.tormovies.ui
+package com.vferreirati.tormovies.ui.details
 
 import android.content.Intent
 import android.net.Uri
@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 
 import com.vferreirati.tormovies.R
+import com.vferreirati.tormovies.ui.DetailsFragmentArgs
 import com.vferreirati.tormovies.utils.gone
 import com.vferreirati.tormovies.utils.injector
 import com.vferreirati.tormovies.utils.visible
