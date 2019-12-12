@@ -15,8 +15,7 @@ import com.vferreirati.tormovies.R
 import com.vferreirati.tormovies.data.presentation.MovieEntry
 import com.vferreirati.tormovies.ui.adapter.MovieAdapter
 import com.vferreirati.tormovies.ui.adapter.ShimmerAdapter
-import com.vferreirati.tormovies.utils.injector
-import com.vferreirati.tormovies.utils.viewModel
+import com.vferreirati.tormovies.utils.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
@@ -37,14 +36,25 @@ class HomeFragment : Fragment(), MovieAdapter.MovieCallback {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        initUI()
         adapterTrendingMovies.setCallback(this)
         adapterNewMovies.setCallback(this)
         viewModel.homeState.observe(viewLifecycleOwner, Observer {  state -> mapStateToUi(state) })
     }
 
+    private fun initUI() {
+        etMovieSearchBar.addDebouncedTextListener(1000L, lifecycle) { query ->
+            pbSearch.visible()
+            viewModel.onSearchMovies(query).observe(viewLifecycleOwner, Observer { state ->
+                mapSearchState(state)
+                etMovieSearchBar.setText("")
+            })
+        }
+    }
+
     private fun mapStateToUi(state: HomeState) = when(state) {
         is MoviesLoaded -> showMovies(state.trendingMovies, state.mostRecentMovies)
-        is ErrorLoadingMovies -> onError(state.errorMessage)
+        is ErrorLoadingMovies -> onError(state.errorMessageID)
         is LoadingMovies -> showLoadingIndicator()
     }
 
@@ -59,7 +69,10 @@ class HomeFragment : Fragment(), MovieAdapter.MovieCallback {
         listNewMovies.adapter = adapterRecent
     }
 
-    private fun onError(errorMessage: String) = Snackbar.make(rootLL, errorMessage, Snackbar.LENGTH_LONG).show()
+    private fun onError(messageID: Int) {
+        pbSearch.gone()
+        Snackbar.make(rootLL, getString(messageID), Snackbar.LENGTH_LONG).show()
+    }
 
     private fun showMovies(trendingMovies: List<MovieEntry>, mostRecentMovies: List<MovieEntry>) {
         listTrendingMovies.adapter = adapterTrendingMovies
@@ -71,5 +84,15 @@ class HomeFragment : Fragment(), MovieAdapter.MovieCallback {
 
     override fun onMovieSelected(movieEntry: MovieEntry) {
         findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToDetailsFragment(movieEntry))
+    }
+
+    private fun mapSearchState(event: Event<List<MovieEntry>>) = when(event) {
+        is Success -> showSearchResult(event.data)
+        is Failure -> onError(event.errorMessageID)
+    }
+
+    private fun showSearchResult(movies: List<MovieEntry>) {
+        pbSearch.gone()
+        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSearchFragment(movies.toTypedArray()))
     }
 }

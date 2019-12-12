@@ -21,4 +21,9 @@
     <string name="error">Error</string>
     <string name="error_opening_torrent_client">You don\'t appear to have a torrent client installed.\nPlease install one and try again</string>
     <string name="ok">OK</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="error_query_no_result">No movies found</string>
+    <string name="error_check_internet">Check your internet connection</string>
 </resources>
