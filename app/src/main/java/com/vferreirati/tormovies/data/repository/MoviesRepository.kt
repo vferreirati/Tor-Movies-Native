@@ -1,5 +1,6 @@
 package com.vferreirati.tormovies.data.repository
 
+import com.vferreirati.tormovies.data.enums.SortBy
 import com.vferreirati.tormovies.data.network.model.TorrentEntryModel
 import com.vferreirati.tormovies.data.network.model.TorrentModel
 import com.vferreirati.tormovies.data.network.services.MoviesService
@@ -13,13 +14,13 @@ class MoviesRepository @Inject constructor(
 ) {
 
     suspend fun queryMovies(
-        sortBy: String,
+        sortBy: SortBy,
         page: Int = 1,
         keywords: String? = null,
         genre: String? = null
     ): List<MovieEntry> {
         val response = moviesService.queryMovies(
-            sortBy = sortBy,
+            sortBy = sortBy.apiName,
             page = page,
             query = keywords,
             genre = genre

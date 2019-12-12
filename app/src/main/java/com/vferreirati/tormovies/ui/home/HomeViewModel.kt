@@ -2,6 +2,7 @@ package com.vferreirati.tormovies.ui.home
 
 import androidx.lifecycle.*
 import com.vferreirati.tormovies.R
+import com.vferreirati.tormovies.data.enums.SortBy
 import com.vferreirati.tormovies.data.presentation.MovieEntry
 import com.vferreirati.tormovies.data.repository.MoviesRepository
 import com.vferreirati.tormovies.utils.Event
@@ -25,8 +26,8 @@ class HomeViewModel @Inject constructor(
             try {
                 _homeState.postValue(LoadingMovies)
 
-                val trendingMovies = moviesRepository.queryMovies(sortBy = "trending")
-                val mostRecent = moviesRepository.queryMovies(sortBy = "last added")
+                val trendingMovies = moviesRepository.queryMovies(sortBy = SortBy.TRENDING)
+                val mostRecent = moviesRepository.queryMovies(sortBy = SortBy.LAST_ADDED)
 
                 _homeState.postValue(MoviesLoaded(trendingMovies = trendingMovies, mostRecentMovies = mostRecent))
             } catch (t: Throwable) {
@@ -41,8 +42,7 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                // TODO: Refactor the sort by param to a Enum Class
-                val moviesResult = moviesRepository.queryMovies(keywords = query, sortBy = "trending")
+                val moviesResult = moviesRepository.queryMovies(keywords = query, sortBy = SortBy.TRENDING)
                 if (moviesResult.isEmpty()) {
                     result.value = Failure(R.string.error_query_no_result)
 
