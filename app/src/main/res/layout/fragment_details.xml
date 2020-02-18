@@ -34,7 +34,6 @@
                 tools:text="Aquaman" />
 
             <com.google.android.material.button.MaterialButton
-                android:visibility="gone"
                 android:id="@+id/btnDownload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -42,6 +41,7 @@
                 android:layout_marginTop="5dp"
                 android:text="@string/download_now"
                 android:textSize="12sp"
+                android:visibility="gone"
                 app:cornerRadius="20dp" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -119,6 +119,7 @@
                         style="@style/MovieSynopsis"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginStart="20dp"
                         android:layout_weight="1"
                         tools:text="2018" />
@@ -136,9 +137,9 @@
         android:layout_marginEnd="20dp"
         android:src="@drawable/ic_play"
         app:backgroundTint="@color/youtubeRed"
-        app:tint='@android:color/white'
         app:layout_anchor="@id/imgMoviePoster"
-        app:layout_anchorGravity="bottom|right|end" />
+        app:layout_anchorGravity="bottom|right|end"
+        app:tint='@android:color/white' />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/btnUp"
