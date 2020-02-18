@@ -3,10 +3,10 @@ package com.vferreirati.tormovies.ui.dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.vferreirati.tormovies.R
@@ -31,8 +31,17 @@ class SelectQualityDialog(
         listTorrents.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = TorrentAdapter(torrents) { url ->
-                startActivity(Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(url) })
-                dismiss()
+                try {
+                    startActivity(Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(url) })
+                } catch (t: Throwable) {
+                    AlertDialog.Builder(context)
+                        .setTitle(R.string.error)
+                        .setMessage(R.string.error_opening_torrent_client)
+                        .setPositiveButton(R.string.ok) {_, _ -> dismiss()}
+                        .show()
+                } finally {
+                    dismiss()
+                }
             }
         }
     }

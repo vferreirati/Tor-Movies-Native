@@ -58,9 +58,11 @@ dependencies {
     // HttpLoggingInterceptor
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
 
-    // ViewModel & LiveData
+    // ViewModel & LiveData & Lifecycle
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation 'androidx.lifecycle:lifecycle-common-java8:2.1.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0-rc03'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0-rc03'
 
     // Navigation
     implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0'

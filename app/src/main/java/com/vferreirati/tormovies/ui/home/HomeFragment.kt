@@ -12,39 +12,44 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 
 import com.vferreirati.tormovies.R
+import com.vferreirati.tormovies.data.enums.SortBy
 import com.vferreirati.tormovies.data.presentation.MovieEntry
 import com.vferreirati.tormovies.ui.adapter.MovieAdapter
 import com.vferreirati.tormovies.ui.adapter.ShimmerAdapter
-import com.vferreirati.tormovies.utils.injector
-import com.vferreirati.tormovies.utils.viewModel
+import com.vferreirati.tormovies.ui.list.ListFragment
+import com.vferreirati.tormovies.ui.list.ListFragmentDirections
+import com.vferreirati.tormovies.utils.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
-class HomeFragment : Fragment(), MovieAdapter.MovieCallback {
+class HomeFragment : Fragment(R.layout.fragment_home), MovieAdapter.MovieCallback {
 
     private val viewModel by viewModel { injector.homeViewModel }
     private val adapterTrendingMovies by lazy { injector.movieAdapter }
     private val adapterNewMovies by lazy { injector.movieAdapter }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        initUI()
         adapterTrendingMovies.setCallback(this)
         adapterNewMovies.setCallback(this)
-        viewModel.homeState.observe(viewLifecycleOwner, Observer {  state -> mapStateToUi(state) })
+        viewModel.homeState.observe(viewLifecycleOwner, Observer { state -> mapStateToUi(state) })
     }
 
-    private fun mapStateToUi(state: HomeState) = when(state) {
+    private fun initUI() {
+        etMovieSearchBar.addDebouncedTextListener(1000L, lifecycle) { query ->
+            pbSearch.visible()
+            viewModel.onSearchMovies(query).observe(viewLifecycleOwner, Observer { state ->
+                mapSearchState(state)
+                etMovieSearchBar.setText("")
+            })
+        }
+    }
+
+    private fun mapStateToUi(state: HomeState) = when (state) {
         is MoviesLoaded -> showMovies(state.trendingMovies, state.mostRecentMovies)
-        is ErrorLoadingMovies -> onError(state.errorMessage)
+        is ErrorLoadingMovies -> onError(state.errorMessageID)
         is LoadingMovies -> showLoadingIndicator()
     }
 
@@ -52,14 +57,19 @@ class HomeFragment : Fragment(), MovieAdapter.MovieCallback {
         val adapterTrending = ShimmerAdapter(R.layout.list_shimmer_item, 10)
         val adapterRecent = ShimmerAdapter(R.layout.list_shimmer_item, 10)
 
-        listTrendingMovies.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        listTrendingMovies.layoutManager =
+            LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         listTrendingMovies.adapter = adapterTrending
 
-        listNewMovies.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        listNewMovies.layoutManager =
+            LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         listNewMovies.adapter = adapterRecent
     }
 
-    private fun onError(errorMessage: String) = Snackbar.make(rootLL, errorMessage, Snackbar.LENGTH_LONG).show()
+    private fun onError(messageID: Int) {
+        pbSearch.gone()
+        Snackbar.make(rootLL, getString(messageID), Snackbar.LENGTH_LONG).show()
+    }
 
     private fun showMovies(trendingMovies: List<MovieEntry>, mostRecentMovies: List<MovieEntry>) {
         listTrendingMovies.adapter = adapterTrendingMovies
@@ -67,9 +77,49 @@ class HomeFragment : Fragment(), MovieAdapter.MovieCallback {
 
         listNewMovies.adapter = adapterNewMovies
         adapterNewMovies.setEntries(mostRecentMovies)
+
+        btnTrending.setOnClickListener { onSeeTrendingMovies(trendingMovies) }
+        btnMostRecent.setOnClickListener { onSeeMostRecentMovies(mostRecentMovies) }
+    }
+
+    private fun onSeeMostRecentMovies(entries: List<MovieEntry>) {
+        findNavController().navigate(
+            HomeFragmentDirections.actionHomeFragmentToSearchFragment(
+                entries.toTypedArray(),
+                SortBy.LAST_ADDED
+            )
+        )
+    }
+
+    private fun onSeeTrendingMovies(entries: List<MovieEntry>) {
+        findNavController().navigate(
+            HomeFragmentDirections.actionHomeFragmentToSearchFragment(
+                entries.toTypedArray(),
+                SortBy.TRENDING
+            )
+        )
     }
 
     override fun onMovieSelected(movieEntry: MovieEntry) {
-        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToDetailsFragment(movieEntry))
+        findNavController().navigate(
+            HomeFragmentDirections.actionHomeFragmentToDetailsFragment(
+                movieEntry
+            )
+        )
+    }
+
+    private fun mapSearchState(event: Event<List<MovieEntry>>) = when (event) {
+        is Success -> showSearchResult(event.data)
+        is Failure -> onError(event.errorMessageID)
+    }
+
+    private fun showSearchResult(movies: List<MovieEntry>) {
+        pbSearch.gone()
+        findNavController().navigate(
+            HomeFragmentDirections.actionHomeFragmentToSearchFragment(
+                movies.toTypedArray(),
+                SortBy.TRENDING
+            )
+        )
     }
 }
