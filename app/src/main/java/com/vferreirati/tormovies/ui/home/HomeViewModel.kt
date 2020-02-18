@@ -51,6 +51,7 @@ class HomeViewModel @Inject constructor(
                 }
 
             } catch (t: Throwable) {
+                t.printStackTrace()
                 result.value = Failure(R.string.error_check_internet)
             }
         }

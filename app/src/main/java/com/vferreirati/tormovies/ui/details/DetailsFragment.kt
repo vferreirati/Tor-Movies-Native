@@ -3,12 +3,15 @@ package com.vferreirati.tormovies.ui.details
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
 
 import com.vferreirati.tormovies.R
 import com.vferreirati.tormovies.data.presentation.MovieTorrent
@@ -25,6 +28,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initUi()
+        initAd()
     }
 
     private fun initUi() {
@@ -67,6 +71,16 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         txtMovieGenres.text = genresBuilder.toString()
 
         btnDownload.setOnClickListener { onDownloadTorrent() }
+    }
+
+    private fun initAd() {
+        val request = AdRequest.Builder().build()
+        detailBannerAd.loadAd(request)
+        detailBannerAd.adListener = object : AdListener() {
+            override fun onAdFailedToLoad(errorCode: Int) {
+                Log.e("Victor", errorCode.toString())
+            }
+        }
     }
 
     private fun onDownloadTorrent() {

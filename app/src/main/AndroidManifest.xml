@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-8404166360433487~1369175730"/>
         <activity
             android:name=".ui.MainActivity"
             android:screenOrientation="portrait">
