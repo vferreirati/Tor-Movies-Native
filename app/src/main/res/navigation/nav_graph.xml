@@ -19,7 +19,7 @@
             app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_homeFragment_to_searchFragment"
-            app:destination="@id/searchFragment"
+            app:destination="@id/listFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -35,15 +35,18 @@
             app:argType="com.vferreirati.tormovies.data.presentation.MovieEntry" />
     </fragment>
     <fragment
-        android:id="@+id/searchFragment"
+        android:id="@+id/listFragment"
         android:name="com.vferreirati.tormovies.ui.list.ListFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search">
+        tools:layout="@layout/fragment_list">
         <argument
             android:name="initialSearchResult"
             app:argType="com.vferreirati.tormovies.data.presentation.MovieEntry[]" />
+        <argument
+            android:name="sortBy"
+            app:argType="com.vferreirati.tormovies.data.enums.SortBy" />
         <action
-            android:id="@+id/action_searchFragment_to_detailsFragment"
+            android:id="@+id/action_listFragment_to_detailsFragment"
             app:destination="@id/detailsFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"

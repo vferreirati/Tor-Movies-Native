@@ -3,9 +3,6 @@ package com.vferreirati.tormovies.ui.list
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
@@ -15,11 +12,11 @@ import com.vferreirati.tormovies.data.presentation.MovieEntry
 import com.vferreirati.tormovies.ui.adapter.MovieAdapter
 import com.vferreirati.tormovies.ui.adapter.MovieSearchAdapter
 import com.vferreirati.tormovies.utils.injector
-import kotlinx.android.synthetic.main.fragment_search.*
+import kotlinx.android.synthetic.main.fragment_list.*
 
-class ListFragment : Fragment(R.layout.fragment_search), MovieAdapter.MovieCallback {
+class ListFragment : Fragment(R.layout.fragment_list), MovieAdapter.MovieCallback {
 
-    private val args: SearchFragmentArgs by navArgs()
+    private val args: ListFragmentArgs by navArgs()
 
     private val adapter: MovieSearchAdapter by lazy { injector.movieSearchAdapter }
 
@@ -39,6 +36,6 @@ class ListFragment : Fragment(R.layout.fragment_search), MovieAdapter.MovieCallb
     }
 
     override fun onMovieSelected(movieEntry: MovieEntry) {
-        findNavController().navigate(SearchFragmentDirections.actionSearchFragmentToDetailsFragment(movieEntry))
+        findNavController().navigate(ListFragmentDirections.actionListFragmentToDetailsFragment(movieEntry))
     }
 }

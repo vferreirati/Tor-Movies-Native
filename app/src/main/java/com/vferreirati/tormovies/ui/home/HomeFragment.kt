@@ -12,9 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 
 import com.vferreirati.tormovies.R
+import com.vferreirati.tormovies.data.enums.SortBy
 import com.vferreirati.tormovies.data.presentation.MovieEntry
 import com.vferreirati.tormovies.ui.adapter.MovieAdapter
 import com.vferreirati.tormovies.ui.adapter.ShimmerAdapter
+import com.vferreirati.tormovies.ui.list.ListFragment
+import com.vferreirati.tormovies.ui.list.ListFragmentDirections
 import com.vferreirati.tormovies.utils.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -31,7 +34,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), MovieAdapter.MovieCallbac
         initUI()
         adapterTrendingMovies.setCallback(this)
         adapterNewMovies.setCallback(this)
-        viewModel.homeState.observe(viewLifecycleOwner, Observer {  state -> mapStateToUi(state) })
+        viewModel.homeState.observe(viewLifecycleOwner, Observer { state -> mapStateToUi(state) })
     }
 
     private fun initUI() {
@@ -44,7 +47,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), MovieAdapter.MovieCallbac
         }
     }
 
-    private fun mapStateToUi(state: HomeState) = when(state) {
+    private fun mapStateToUi(state: HomeState) = when (state) {
         is MoviesLoaded -> showMovies(state.trendingMovies, state.mostRecentMovies)
         is ErrorLoadingMovies -> onError(state.errorMessageID)
         is LoadingMovies -> showLoadingIndicator()
@@ -54,10 +57,12 @@ class HomeFragment : Fragment(R.layout.fragment_home), MovieAdapter.MovieCallbac
         val adapterTrending = ShimmerAdapter(R.layout.list_shimmer_item, 10)
         val adapterRecent = ShimmerAdapter(R.layout.list_shimmer_item, 10)
 
-        listTrendingMovies.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        listTrendingMovies.layoutManager =
+            LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         listTrendingMovies.adapter = adapterTrending
 
-        listNewMovies.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        listNewMovies.layoutManager =
+            LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         listNewMovies.adapter = adapterRecent
     }
 
@@ -72,19 +77,49 @@ class HomeFragment : Fragment(R.layout.fragment_home), MovieAdapter.MovieCallbac
 
         listNewMovies.adapter = adapterNewMovies
         adapterNewMovies.setEntries(mostRecentMovies)
+
+        btnTrending.setOnClickListener { onSeeTrendingMovies(trendingMovies) }
+        btnMostRecent.setOnClickListener { onSeeMostRecentMovies(mostRecentMovies) }
+    }
+
+    private fun onSeeMostRecentMovies(entries: List<MovieEntry>) {
+        findNavController().navigate(
+            HomeFragmentDirections.actionHomeFragmentToSearchFragment(
+                entries.toTypedArray(),
+                SortBy.LAST_ADDED
+            )
+        )
+    }
+
+    private fun onSeeTrendingMovies(entries: List<MovieEntry>) {
+        findNavController().navigate(
+            HomeFragmentDirections.actionHomeFragmentToSearchFragment(
+                entries.toTypedArray(),
+                SortBy.TRENDING
+            )
+        )
     }
 
     override fun onMovieSelected(movieEntry: MovieEntry) {
-        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToDetailsFragment(movieEntry))
+        findNavController().navigate(
+            HomeFragmentDirections.actionHomeFragmentToDetailsFragment(
+                movieEntry
+            )
+        )
     }
 
-    private fun mapSearchState(event: Event<List<MovieEntry>>) = when(event) {
+    private fun mapSearchState(event: Event<List<MovieEntry>>) = when (event) {
         is Success -> showSearchResult(event.data)
         is Failure -> onError(event.errorMessageID)
     }
 
     private fun showSearchResult(movies: List<MovieEntry>) {
         pbSearch.gone()
-        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSearchFragment(movies.toTypedArray()))
+        findNavController().navigate(
+            HomeFragmentDirections.actionHomeFragmentToSearchFragment(
+                movies.toTypedArray(),
+                SortBy.TRENDING
+            )
+        )
     }
 }
