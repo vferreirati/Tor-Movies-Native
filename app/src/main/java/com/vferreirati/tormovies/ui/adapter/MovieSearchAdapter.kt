@@ -15,12 +15,14 @@ import com.vferreirati.tormovies.data.presentation.MovieEntry
 import kotlinx.android.synthetic.main.item_grid_movie.view.*
 import kotlinx.android.synthetic.main.item_list_ad.view.*
 import javax.inject.Inject
+import kotlin.math.ceil
+
 
 class MovieSearchAdapter @Inject constructor(
     private val picasso: Picasso
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var entries: List<MovieEntry>? = null
+    private var entries = mutableListOf<MovieEntry>()
     private lateinit var callback: MovieAdapter.MovieCallback
 
     override fun onCreateViewHolder(
@@ -37,18 +39,17 @@ class MovieSearchAdapter @Inject constructor(
     }
 
     override fun getItemCount(): Int {
-        if (entries == null)
-            return 0
-
-
-        // FIXME: This is causing a IndexOutOfBoundsException when the entries size is less than 9
-        return entries!!.size + (entries!!.size % 9)
+        var additionalContent = 0
+        if (entries.size > 0 && entries.size > AD_INTERVAL) {
+            additionalContent = entries.size / AD_INTERVAL
+        }
+        return entries.size + additionalContent + 1
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == ITEM_VIEW_TYPE) {
             val movieHolder = holder as MovieSearchHolder
-            val entry = entries!![position]
+            val entry = entries[getRealPosition(position)]
 
             entry.images.posterUrl?.let { url -> picasso.load(url)
                 .placeholder(R.drawable.placeholder_movie_poster)
@@ -68,12 +69,18 @@ class MovieSearchAdapter @Inject constructor(
         }
     }
 
+    private fun getRealPosition(position: Int): Int {
+        val ceil = position - ceil(position / AD_INTERVAL.toDouble()).toInt()
+        return ceil
+    }
+
     override fun getItemViewType(position: Int): Int {
-        return if (position % 9 == 0) AD_VIEW_TYPE else ITEM_VIEW_TYPE
+        return if (position % AD_INTERVAL == 0) AD_VIEW_TYPE else ITEM_VIEW_TYPE
     }
 
     fun setEntries(movies: List<MovieEntry>) {
-        entries = movies
+        entries.clear()
+        entries.addAll(movies)
         notifyDataSetChanged()
     }
 
@@ -92,5 +99,6 @@ class MovieSearchAdapter @Inject constructor(
     companion object {
         const val AD_VIEW_TYPE = 100
         const val ITEM_VIEW_TYPE = 200
+        const val AD_INTERVAL = 11   // 10 items between ads
     }
 }
