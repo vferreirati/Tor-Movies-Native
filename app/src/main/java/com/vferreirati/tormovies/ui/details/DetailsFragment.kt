@@ -18,18 +18,10 @@ import com.vferreirati.tormovies.utils.injector
 import com.vferreirati.tormovies.utils.visible
 import kotlinx.android.synthetic.main.fragment_details.*
 
-class DetailsFragment : Fragment() {
+class DetailsFragment : Fragment(R.layout.fragment_details) {
 
     private val args: DetailsFragmentArgs by navArgs()
     private val picasso by lazy { injector.picasso }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_details, container, false)
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initUi()

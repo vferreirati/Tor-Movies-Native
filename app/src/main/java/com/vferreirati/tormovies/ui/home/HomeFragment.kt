@@ -19,19 +19,11 @@ import com.vferreirati.tormovies.utils.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
-class HomeFragment : Fragment(), MovieAdapter.MovieCallback {
+class HomeFragment : Fragment(R.layout.fragment_home), MovieAdapter.MovieCallback {
 
     private val viewModel by viewModel { injector.homeViewModel }
     private val adapterTrendingMovies by lazy { injector.movieAdapter }
     private val adapterNewMovies by lazy { injector.movieAdapter }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
