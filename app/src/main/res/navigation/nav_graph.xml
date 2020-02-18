@@ -36,7 +36,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.vferreirati.tormovies.ui.search.SearchFragment"
+        android:name="com.vferreirati.tormovies.ui.list.ListFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search">
         <argument
