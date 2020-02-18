@@ -40,6 +40,8 @@ class MovieSearchAdapter @Inject constructor(
         if (entries == null)
             return 0
 
+
+        // FIXME: This is causing a IndexOutOfBoundsException when the entries size is less than 9
         return entries!!.size + (entries!!.size % 9)
     }
 
