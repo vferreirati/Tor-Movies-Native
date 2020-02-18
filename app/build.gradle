@@ -87,4 +87,7 @@ dependencies {
     // Activity and Fragment KTX
     implementation 'androidx.activity:activity-ktx:1.0.0'
     implementation 'androidx.fragment:fragment-ktx:1.1.0'
+
+    // AdMob
+    implementation 'com.google.android.gms:play-services-ads:18.3.0'
 }

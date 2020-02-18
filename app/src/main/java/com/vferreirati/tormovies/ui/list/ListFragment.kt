@@ -31,11 +31,27 @@ class ListFragment : Fragment(R.layout.fragment_list), MovieAdapter.MovieCallbac
             setCallback(this@ListFragment)
             setEntries(args.initialSearchResult.toList())
         }
-        listMovies.layoutManager = GridLayoutManager(context, 2)
+
+        val manager = GridLayoutManager(context, 2)
+        manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                val viewType = adapter.getItemViewType(position)
+                return if (viewType == MovieSearchAdapter.ITEM_VIEW_TYPE)
+                    1
+                else
+                    2
+            }
+        }
+
+        listMovies.layoutManager = manager
         listMovies.adapter = adapter
     }
 
     override fun onMovieSelected(movieEntry: MovieEntry) {
-        findNavController().navigate(ListFragmentDirections.actionListFragmentToDetailsFragment(movieEntry))
+        findNavController().navigate(
+            ListFragmentDirections.actionListFragmentToDetailsFragment(
+                movieEntry
+            )
+        )
     }
 }
