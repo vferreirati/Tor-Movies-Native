@@ -84,11 +84,11 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     }
 
     private fun onDownloadTorrent() {
-//        val movie = args.movieEntry
-//        val torrentList = mutableListOf<MovieTorrent>()
-//        movie.hdTorrent?.let { torrentList.add(it) }
-//        movie.fullHdTorrent?.let { torrentList.add(it) }
-//
-//        SelectQualityDialog(torrentList).show(activity!!.supportFragmentManager, "SelectQualityDialog")
+        val movie = args.movieEntry
+        val torrentList = mutableListOf<MovieTorrent>()
+        movie.hdTorrent?.let { torrentList.add(it) }
+        movie.fullHdTorrent?.let { torrentList.add(it) }
+
+        SelectQualityDialog(torrentList).show(activity!!.supportFragmentManager, "SelectQualityDialog")
     }
 }
