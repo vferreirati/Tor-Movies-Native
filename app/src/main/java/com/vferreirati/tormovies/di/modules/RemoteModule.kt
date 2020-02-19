@@ -7,6 +7,7 @@ import com.vferreirati.tormovies.data.network.services.MoviesService
 import com.vferreirati.tormovies.utils.API_URL
 import dagger.Module
 import dagger.Provides
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
@@ -16,9 +17,11 @@ object RemoteModule {
     @Provides
     @ApplicationScope
     fun retrofit(
-        moshiFactory: MoshiConverterFactory
+        moshiFactory: MoshiConverterFactory,
+        client: OkHttpClient
     ): Retrofit = Retrofit.Builder()
         .baseUrl(API_URL)
+        .client(client)
         .addConverterFactory(moshiFactory)
         .build()
 

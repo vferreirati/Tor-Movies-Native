@@ -11,5 +11,5 @@ data class TorrentEntryModel(
     @Json(name = "trailer") val youtubeTrailerUrl: String?,
     @Json(name = "torrents") val torrents: TorrentWrapperModel,
     @Json(name = "genres") val genres: List<String>,
-    @Json(name = "images") val images: ImageWrapper
+    @Json(name = "images") val images: ImageWrapper?
 )
