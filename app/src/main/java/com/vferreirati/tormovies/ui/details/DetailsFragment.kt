@@ -14,6 +14,7 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.vferreirati.tormovies.R
 import com.vferreirati.tormovies.data.presentation.MovieTorrent
 import com.vferreirati.tormovies.ui.dialog.SelectQualityDialog
+import com.vferreirati.tormovies.utils.getDefaultRequest
 import com.vferreirati.tormovies.utils.gone
 import com.vferreirati.tormovies.utils.injector
 import com.vferreirati.tormovies.utils.visible
@@ -80,7 +81,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     }
 
     private fun initBannerAd() {
-        val request = AdRequest.Builder().build()
+        val request = getDefaultRequest()
         detailBannerAd.loadAd(request)
         detailBannerAd.adListener = object : AdListener() {
             override fun onAdFailedToLoad(errorCode: Int) {
@@ -90,7 +91,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     }
 
     private fun loadRewardedAd() {
-        val request = AdRequest.Builder().build()
+        val request = getDefaultRequest()
         rewardedAd = RewardedAd(context, getString(R.string.full_hd_rewarded_ad_id)).apply {
             loadAd(request, object : RewardedAdLoadCallback() {
                 override fun onRewardedAdFailedToLoad(errorCode: Int) {

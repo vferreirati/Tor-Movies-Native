@@ -14,6 +14,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.coroutineScope
+import com.google.android.gms.ads.AdRequest
 import com.vferreirati.tormovies.TorApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -84,3 +85,5 @@ fun AppCompatEditText.addDebouncedTextListener(
         }
     }
 })
+
+fun getDefaultRequest(): AdRequest = AdRequest.Builder().addTestDevice("11A8B1813CA154DBAFFF51CCF5584D50").build()
