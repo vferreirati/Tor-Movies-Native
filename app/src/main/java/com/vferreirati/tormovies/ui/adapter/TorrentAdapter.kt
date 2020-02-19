@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.item_list_torrent.view.*
 
 class TorrentAdapter(
     private val torrents: List<MovieTorrent>,
-    private val onClick: (String) -> Unit
+    private val onClick: (MovieTorrent) -> Unit
 ): RecyclerView.Adapter<TorrentAdapter.TorrentHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TorrentHolder {
@@ -23,14 +23,17 @@ class TorrentAdapter(
 
     override fun onBindViewHolder(holder: TorrentHolder, position: Int) {
         val torrent = torrents[position]
+        val context = holder.itemView.context
+        val hasAdResId = if (torrent.hasAd) R.string.yes else R.string.no
 
         holder.txtFileSize.text = torrent.fileSize
         holder.txtTorrentQuality.text = torrent.quality
         holder.txtTorrentSource.text = torrent.source
         holder.txtPeerCount.text = torrent.peerCount.toString()
         holder.txtSeedCount.text = torrent.seedCount.toString()
+        holder.txtAdToDownload.text = context.getString(hasAdResId)
 
-        holder.itemView.setOnClickListener { onClick(torrent.magneticUrl) }
+        holder.itemView.setOnClickListener { onClick(torrent) }
     }
 
     inner class TorrentHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -39,5 +42,6 @@ class TorrentAdapter(
         val txtPeerCount: AppCompatTextView = itemView.txtPeerCount
         val txtFileSize: AppCompatTextView = itemView.txtFileSize
         val txtTorrentSource: AppCompatTextView = itemView.txtTorrentSource
+        val txtAdToDownload: AppCompatTextView = itemView.txtHasAd
     }
 }

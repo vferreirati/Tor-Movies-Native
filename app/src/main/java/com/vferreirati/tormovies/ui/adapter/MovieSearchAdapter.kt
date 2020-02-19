@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.squareup.picasso.Picasso
 import com.vferreirati.tormovies.R
 import com.vferreirati.tormovies.data.presentation.MovieEntry
+import com.vferreirati.tormovies.utils.getDefaultRequest
 import kotlinx.android.synthetic.main.item_grid_movie.view.*
 import kotlinx.android.synthetic.main.item_list_ad.view.*
 import javax.inject.Inject
@@ -59,7 +59,7 @@ class MovieSearchAdapter @Inject constructor(
             holder.itemView.setOnClickListener { callback.onMovieSelected(entry) }
         } else {
             val adHolder = holder as AdHolder
-            val adRequest = AdRequest.Builder().build()
+            val adRequest = getDefaultRequest()
             adHolder.adView.loadAd(adRequest)
             adHolder.adView.adListener = object : AdListener() {
                 override fun onAdFailedToLoad(errorCode: Int) {
@@ -70,8 +70,7 @@ class MovieSearchAdapter @Inject constructor(
     }
 
     private fun getRealPosition(position: Int): Int {
-        val ceil = position - ceil(position / AD_INTERVAL.toDouble()).toInt()
-        return ceil
+        return position - ceil(position / AD_INTERVAL.toDouble()).toInt()
     }
 
     override fun getItemViewType(position: Int): Int {

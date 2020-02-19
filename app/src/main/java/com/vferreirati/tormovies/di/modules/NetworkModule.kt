@@ -20,11 +20,9 @@ object NetworkModule {
     @Provides
     @ApplicationScope
     fun okHttpClient(
-        networkInterceptor: HttpLoggingInterceptor,
-        cache: Cache
+        networkInterceptor: HttpLoggingInterceptor
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(networkInterceptor)
-        .cache(cache)
         .connectTimeout(15, TimeUnit.SECONDS)
         .readTimeout(15, TimeUnit.SECONDS)
         .build()

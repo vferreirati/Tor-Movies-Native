@@ -38,14 +38,15 @@ class MoviesRepository @Inject constructor(
             year = entry.releaseYear,
             youtubeTrailerUrl = entry.youtubeTrailerUrl,
             images = MovieImages(
-                posterUrl = entry.images.posterUrl?.replace("http://", "https://"),
-                bannerUrl = entry.images.bannerUrl?.replace("http://", "https://"),
-                fanArtUrl = entry.images.fanArtUrl?.replace("http://", "https://")
+                posterUrl = entry.images?.posterUrl?.replace("http://", "https://"),
+                bannerUrl = entry.images?.bannerUrl?.replace("http://", "https://"),
+                fanArtUrl = entry.images?.fanArtUrl?.replace("http://", "https://")
             ),
             fullHdTorrent = entry.torrents.englishTorrents?.fullHdTorrent?.let { tor ->
                 mapTorrentToDomain(
                     tor,
-                    "1080p"
+                    "1080p",
+                    true
                 )
             },
             hdTorrent = entry.torrents.englishTorrents?.hdTorrent?.let { tor ->
@@ -57,14 +58,15 @@ class MoviesRepository @Inject constructor(
         )
     }
 
-    private fun mapTorrentToDomain(tor: TorrentModel, quality: String): MovieTorrent {
+    private fun mapTorrentToDomain(tor: TorrentModel, quality: String, hasAd: Boolean = false): MovieTorrent {
         return MovieTorrent(
             quality = quality,
             fileSize = tor.fileSize,
             magneticUrl = tor.magneticUrl,
             peerCount = tor.peers,
             seedCount = tor.seeders,
-            source = tor.source
+            source = tor.source,
+            hasAd = hasAd
         )
     }
 }
