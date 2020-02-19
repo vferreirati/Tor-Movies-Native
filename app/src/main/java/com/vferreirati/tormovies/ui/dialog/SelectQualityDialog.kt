@@ -42,23 +42,12 @@ class SelectQualityDialog(
     }
 
     private fun onTorrentSelected(torrent: MovieTorrent) {
-        try {
-            if (torrent.hasAd) {
-                showAd(torrent.magneticUrl)
-            } else {
-                onShowTorrent(torrent.magneticUrl)
-            }
-
-        } catch (t: Throwable) {
-            AlertDialog.Builder(context!!)
-                .setTitle(R.string.error)
-                .setMessage(R.string.error_opening_torrent_client)
-                .setPositiveButton(R.string.ok) {_, _ -> dismiss()}
-                .show()
-
-        } finally {
-            dismiss()
+        if (torrent.hasAd) {
+            showAd(torrent.magneticUrl)
+        } else {
+            onShowTorrent(torrent.magneticUrl)
         }
+        dismiss()
     }
 
     private fun showAd(torrentUrl: String) {

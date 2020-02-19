@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -111,8 +112,19 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         movie.hdTorrent?.let { torrentList.add(it) }
         movie.fullHdTorrent?.let { torrentList.add(it) }
 
-        SelectQualityDialog(torrentList, rewardedAd) { torrentUrl ->
-            startActivity(Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(torrentUrl) })
-        }.show(activity!!.supportFragmentManager, "SelectQualityDialog")
+        val intent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(torrentList.first().magneticUrl) }
+        val resolve = intent.resolveActivity(activity!!.packageManager)
+        if (resolve != null) {
+            SelectQualityDialog(torrentList, rewardedAd) { torrentUrl ->
+                startActivity(Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(torrentUrl) })
+            }.show(activity!!.supportFragmentManager, "SelectQualityDialog")
+
+        } else {
+            AlertDialog.Builder(context!!)
+                .setTitle(R.string.error)
+                .setMessage(R.string.error_opening_torrent_client)
+                .setPositiveButton(R.string.ok) { d, _ -> d.dismiss() }
+                .show()
+        }
     }
 }

@@ -19,7 +19,7 @@
     <string name="source">Source:</string>
     <string name="file_size">File size:</string>
     <string name="error">Error</string>
-    <string name="error_opening_torrent_client">You don\'t appear to have a torrent client installed.\nPlease install one and try again</string>
+    <string name="error_opening_torrent_client">You don\'t appear to have a torrent client installed.\nPlease install Flud or any other client of your preference and try again.</string>
     <string name="ok">OK</string>
     <string name="error_query_no_result">No movies found</string>
     <string name="error_check_internet">Check your internet connection</string>
