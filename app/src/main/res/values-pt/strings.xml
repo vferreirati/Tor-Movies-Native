@@ -18,10 +18,13 @@
     <string name="seed">Seed:</string>
     <string name="peer">Peer:</string>
     <string name="source">Provedor:</string>
-    <string name="file_size">Tamanho do arquivo:</string>
+    <string name="file_size">Tamanho:</string>
     <string name="error">Erro</string>
     <string name="error_opening_torrent_client">Você não possui um cliente de torrent instalado, por favor instale um e tente novamente</string>
     <string name="ok">OK</string>
     <string name="error_query_no_result">Nenhum filme encontrado</string>
     <string name="error_check_internet">Verifique sua conexão com a internet</string>
+    <string name="ad_to_download">Anúncio:</string>
+    <string name="yes">sim</string>
+    <string name="no">não</string>
 </resources>

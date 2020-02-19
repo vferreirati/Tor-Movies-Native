@@ -23,4 +23,7 @@
     <string name="ok">OK</string>
     <string name="error_query_no_result">No movies found</string>
     <string name="error_check_internet">Check your internet connection</string>
+    <string name="ad_to_download">Ad:</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
 </resources>
