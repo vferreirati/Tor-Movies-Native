@@ -26,4 +26,5 @@
     <string name="ad_to_download">Ad:</string>
     <string name="yes">yes</string>
     <string name="no">no</string>
+    <string name="full_hd_rewarded_ad_id" translatable="false">ca-app-pub-3940256099942544/5224354917</string>
 </resources>
