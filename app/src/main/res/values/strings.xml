@@ -27,4 +27,5 @@
     <string name="yes">yes</string>
     <string name="no">no</string>
     <string name="full_hd_rewarded_ad_id" translatable="false">ca-app-pub-8404166360433487/3698759942</string>
+    <string name="watch_now">Watch now</string>
 </resources>

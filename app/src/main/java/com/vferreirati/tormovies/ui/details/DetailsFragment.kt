@@ -8,8 +8,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.github.se_bastiaan.torrentstream.StreamStatus
+import com.github.se_bastiaan.torrentstream.Torrent
+import com.github.se_bastiaan.torrentstream.TorrentOptions
+import com.github.se_bastiaan.torrentstream.TorrentStream
+import com.github.se_bastiaan.torrentstream.listeners.TorrentListener
 import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.vferreirati.tormovies.R
@@ -21,7 +25,8 @@ import com.vferreirati.tormovies.utils.injector
 import com.vferreirati.tormovies.utils.visible
 import kotlinx.android.synthetic.main.fragment_details.*
 
-class DetailsFragment : Fragment(R.layout.fragment_details) {
+
+class DetailsFragment : Fragment(R.layout.fragment_details), TorrentListener {
 
     private val args: DetailsFragmentArgs by navArgs()
     private val picasso by lazy { injector.picasso }
@@ -79,6 +84,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         txtMovieGenres.text = genresBuilder.toString()
 
         btnDownload.setOnClickListener { onDownloadTorrent() }
+        btnWatch.setOnClickListener { onWatchTorrent() }
     }
 
     private fun initBannerAd() {
@@ -107,24 +113,70 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     }
 
     private fun onDownloadTorrent() {
-        val movie = args.movieEntry
-        val torrentList = mutableListOf<MovieTorrent>()
-        movie.hdTorrent?.let { torrentList.add(it) }
-        movie.fullHdTorrent?.let { torrentList.add(it) }
+        val torrentList = getTorrentList()
 
         val intent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(torrentList.first().magneticUrl) }
-        val resolve = intent.resolveActivity(activity!!.packageManager)
+        val resolve = intent.resolveActivity(requireActivity().packageManager)
         if (resolve != null) {
             SelectQualityDialog(torrentList, rewardedAd) { torrentUrl ->
                 startActivity(Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(torrentUrl) })
-            }.show(activity!!.supportFragmentManager, "SelectQualityDialog")
+            }.show(requireActivity().supportFragmentManager, "SelectQualityDialog")
 
         } else {
-            AlertDialog.Builder(context!!)
+            AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.error)
                 .setMessage(R.string.error_opening_torrent_client)
                 .setPositiveButton(R.string.ok) { d, _ -> d.dismiss() }
                 .show()
         }
+    }
+
+    private fun onWatchTorrent() {
+        val torrentList = getTorrentList()
+
+        val options = TorrentOptions.Builder()
+            .removeFilesAfterStop(true)
+            .autoDownload(true)
+            .saveLocation(requireActivity().externalCacheDir)
+            .build()
+        val stream = TorrentStream.init(options).apply { addListener(this@DetailsFragment) }
+        stream.startStream(torrentList.first().magneticUrl)
+    }
+
+    private fun getTorrentList() : List<MovieTorrent> {
+        val movie = args.movieEntry
+        val torrentList = mutableListOf<MovieTorrent>()
+        movie.hdTorrent?.let { torrentList.add(it) }
+        movie.fullHdTorrent?.let { torrentList.add(it) }
+
+        return torrentList
+    }
+
+    override fun onStreamReady(torrent: Torrent?) {
+        Log.d("TorMoviesLog", "onStreamReady: ${torrent!!.videoFile}")
+
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(torrent.videoFile.toString()))
+        intent.setDataAndType(Uri.parse(torrent.videoFile.toString()), "video/mp4")
+        startActivity(intent)
+    }
+
+    override fun onStreamPrepared(torrent: Torrent?) {
+        Log.d("TorMoviesLog", "OnStreamPrepared")
+    }
+
+    override fun onStreamStopped() {
+        Log.d("TorMoviesLog", "onStreamStopped")
+    }
+
+    override fun onStreamStarted(torrent: Torrent?) {
+        Log.d("TorMoviesLog", "onStreamStarted")
+    }
+
+    override fun onStreamProgress(torrent: Torrent?, status: StreamStatus?) {
+        Log.d("TorMoviesLog", "Progress: ${status?.progress} | Speed: ${status?.downloadSpeed}" )
+    }
+
+    override fun onStreamError(torrent: Torrent?, e: Exception?) {
+        Log.e("TorMoviesLog", "Got error: $e")
     }
 }
