@@ -1,5 +1,6 @@
 package com.vferreirati.tormovies.data.repository
 
+import com.vferreirati.tormovies.BaseUnitTest
 import com.vferreirati.tormovies.data.enums.SortBy
 import com.vferreirati.tormovies.data.network.model.LanguageWrapperModel
 import com.vferreirati.tormovies.data.network.model.TorrentEntryModel
@@ -18,7 +19,7 @@ import org.junit.Before
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class MoviesRepositoryTest {
+class MoviesRepositoryTest : BaseUnitTest() {
 
     // Mocks
     private val movieService = mockk<MoviesService>()
@@ -199,7 +200,9 @@ class MoviesRepositoryTest {
     private lateinit var moviesRepository: MoviesRepository
 
     @Before
-    fun setup() {
+    override fun setup() {
+        super.setup()
+
         coEvery { movieService.queryMovies() } returns moviesMock
         moviesRepository = MoviesRepository(movieService)
     }

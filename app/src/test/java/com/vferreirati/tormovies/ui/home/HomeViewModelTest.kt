@@ -18,7 +18,7 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Test
 
-@UseExperimental(ExperimentalCoroutinesApi::class)
+@ExperimentalCoroutinesApi
 class HomeViewModelTest : BaseUnitTest() {
 
     // Mock

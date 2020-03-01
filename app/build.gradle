@@ -102,7 +102,7 @@ dependencies {
     // Mockk
     testImplementation "io.mockk:mockk:1.9.3"
 
-    // Robolectric
+    // Android Testing
     testImplementation 'androidx.test:core:1.2.0'
     testImplementation "androidx.arch.core:core-testing:2.1.0"
 }
