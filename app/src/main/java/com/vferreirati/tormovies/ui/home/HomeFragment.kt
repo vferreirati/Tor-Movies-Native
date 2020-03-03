@@ -108,6 +108,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), MovieAdapter.MovieCallbac
     }
 
     private fun showSearchResult(movies: List<MovieEntry>) {
+        hideKeyboard()
         pbSearch.gone()
         findNavController().navigate(
             HomeFragmentDirections.actionHomeFragmentToSearchFragment(
