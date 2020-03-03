@@ -57,15 +57,6 @@ class MovieSearchAdapter @Inject constructor(
             }
 
             holder.itemView.setOnClickListener { callback.onMovieSelected(entry) }
-        } else {
-            val adHolder = holder as AdHolder
-            val adRequest = getDefaultRequest()
-            adHolder.adView.loadAd(adRequest)
-            adHolder.adView.adListener = object : AdListener() {
-                override fun onAdFailedToLoad(errorCode: Int) {
-                    Log.e("Victor", errorCode.toString())
-                }
-            }
         }
     }
 
@@ -92,7 +83,17 @@ class MovieSearchAdapter @Inject constructor(
     }
 
     inner class AdHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val adView: AdView = itemView.adView
+        private val adView: AdView = itemView.adView
+
+        init {
+            val adRequest = getDefaultRequest()
+            adView.loadAd(adRequest)
+            adView.adListener = object : AdListener() {
+                override fun onAdFailedToLoad(errorCode: Int) {
+                    Log.e("MovieSearchAdapter", errorCode.toString())
+                }
+            }
+        }
     }
 
     companion object {
