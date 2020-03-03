@@ -3,21 +3,15 @@ package com.vferreirati.tormovies.ui.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-
 import com.vferreirati.tormovies.R
 import com.vferreirati.tormovies.data.enums.SortBy
 import com.vferreirati.tormovies.data.presentation.MovieEntry
 import com.vferreirati.tormovies.ui.adapter.MovieAdapter
 import com.vferreirati.tormovies.ui.adapter.ShimmerAdapter
-import com.vferreirati.tormovies.ui.list.ListFragment
-import com.vferreirati.tormovies.ui.list.ListFragmentDirections
 import com.vferreirati.tormovies.utils.*
 import kotlinx.android.synthetic.main.fragment_home.*
 

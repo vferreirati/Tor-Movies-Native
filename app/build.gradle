@@ -34,6 +34,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -52,7 +56,7 @@ dependencies {
     kapt 'com.google.dagger:dagger-compiler:2.25.2'
 
     // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.7.1'
     implementation 'com.squareup.retrofit2:converter-moshi:2.6.2'
 
     // HttpLoggingInterceptor
@@ -76,18 +80,29 @@ dependencies {
 
     // Extensões Fragment e Activity
     implementation 'androidx.activity:activity-ktx:1.1.0'
-    implementation 'androidx.fragment:fragment-ktx:1.2.1'
+    implementation 'androidx.fragment:fragment-ktx:1.2.2'
 
     // Shimmer
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     // Moshi
-    implementation 'com.squareup.moshi:moshi-kotlin:1.8.0'
+    implementation 'com.squareup.moshi:moshi-kotlin:1.9.2'
 
     // Activity and Fragment KTX
     implementation 'androidx.activity:activity-ktx:1.1.0'
-    implementation 'androidx.fragment:fragment-ktx:1.2.1'
+    implementation 'androidx.fragment:fragment-ktx:1.2.2'
 
     // AdMob
     implementation 'com.google.android.gms:play-services-ads:18.3.0'
+
+    // Coroutines testing
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.3'
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3"
+
+    // Mockk
+    testImplementation "io.mockk:mockk:1.9.3"
+
+    // Android Testing
+    testImplementation 'androidx.test:core:1.2.0'
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
 }
