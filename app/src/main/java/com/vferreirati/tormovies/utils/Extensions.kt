@@ -4,6 +4,7 @@ import android.app.Activity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.widget.addTextChangedListener
@@ -87,3 +88,8 @@ fun AppCompatEditText.addDebouncedTextListener(
 })
 
 fun getDefaultRequest(): AdRequest = AdRequest.Builder().addTestDevice("11A8B1813CA154DBAFFF51CCF5584D50").build()
+
+fun Fragment.hideKeyboard() {
+    val imm = requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(view?.rootView?.windowToken, 0)
+}
