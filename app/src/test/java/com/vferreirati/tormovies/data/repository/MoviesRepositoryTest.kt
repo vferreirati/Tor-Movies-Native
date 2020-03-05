@@ -38,6 +38,7 @@ class MoviesRepositoryTest : BaseUnitTest() {
                     hdTorrent = TorrentModel(
                         magneticUrl = "",
                         fileSize = "",
+                        sizeInBytes = 10,
                         peers = 0,
                         seeders = 0,
                         source = ""
@@ -45,6 +46,7 @@ class MoviesRepositoryTest : BaseUnitTest() {
                     fullHdTorrent = TorrentModel(
                         magneticUrl = "",
                         fileSize = "",
+                        sizeInBytes = 10,
                         peers = 0,
                         seeders = 0,
                         source = ""
@@ -68,12 +70,14 @@ class MoviesRepositoryTest : BaseUnitTest() {
                         fileSize = "",
                         peers = 0,
                         seeders = 0,
+                        sizeInBytes = 10,
                         source = ""
                     ),
                     fullHdTorrent = TorrentModel(
                         magneticUrl = "",
                         fileSize = "",
                         peers = 0,
+                        sizeInBytes = 10,
                         seeders = 0,
                         source = ""
                     )
@@ -95,6 +99,7 @@ class MoviesRepositoryTest : BaseUnitTest() {
                         magneticUrl = "",
                         fileSize = "",
                         peers = 0,
+                        sizeInBytes = 10,
                         seeders = 0,
                         source = ""
                     ),
@@ -103,6 +108,7 @@ class MoviesRepositoryTest : BaseUnitTest() {
                         fileSize = "",
                         peers = 0,
                         seeders = 0,
+                        sizeInBytes = 10,
                         source = ""
                     )
                 )
@@ -126,6 +132,7 @@ class MoviesRepositoryTest : BaseUnitTest() {
                 magneticUrl = "",
                 hasAd = true,
                 peerCount = 0,
+                sizeInBytes = 10,
                 seedCount = 0
             ),
             hdTorrent = MovieTorrent(
@@ -135,6 +142,7 @@ class MoviesRepositoryTest : BaseUnitTest() {
                 magneticUrl = "",
                 hasAd = false,
                 peerCount = 0,
+                sizeInBytes = 10,
                 seedCount = 0
             )
         ),
@@ -153,6 +161,7 @@ class MoviesRepositoryTest : BaseUnitTest() {
                 fileSize = "",
                 magneticUrl = "",
                 hasAd = true,
+                sizeInBytes = 10,
                 peerCount = 0,
                 seedCount = 0
             ),
@@ -161,6 +170,7 @@ class MoviesRepositoryTest : BaseUnitTest() {
                 source = "",
                 fileSize = "",
                 magneticUrl = "",
+                sizeInBytes = 10,
                 hasAd = false,
                 peerCount = 0,
                 seedCount = 0
@@ -180,6 +190,7 @@ class MoviesRepositoryTest : BaseUnitTest() {
                 source = "",
                 fileSize = "",
                 magneticUrl = "",
+                sizeInBytes = 10,
                 hasAd = true,
                 peerCount = 0,
                 seedCount = 0
@@ -190,6 +201,7 @@ class MoviesRepositoryTest : BaseUnitTest() {
                 fileSize = "",
                 magneticUrl = "",
                 hasAd = false,
+                sizeInBytes = 10,
                 peerCount = 0,
                 seedCount = 0
             )

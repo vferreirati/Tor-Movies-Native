@@ -35,6 +35,7 @@ class HomeViewModelTest : BaseUnitTest() {
             fullHdTorrent = MovieTorrent(
                 quality = "1080p",
                 source = "",
+                sizeInBytes = 10,
                 fileSize = "",
                 magneticUrl = "",
                 hasAd = true,
@@ -46,6 +47,7 @@ class HomeViewModelTest : BaseUnitTest() {
                 source = "",
                 fileSize = "",
                 magneticUrl = "",
+                sizeInBytes = 10,
                 hasAd = false,
                 peerCount = 0,
                 seedCount = 0
@@ -63,6 +65,7 @@ class HomeViewModelTest : BaseUnitTest() {
             fullHdTorrent = MovieTorrent(
                 quality = "1080p",
                 source = "",
+                sizeInBytes = 10,
                 fileSize = "",
                 magneticUrl = "",
                 hasAd = true,
@@ -75,6 +78,7 @@ class HomeViewModelTest : BaseUnitTest() {
                 fileSize = "",
                 magneticUrl = "",
                 hasAd = false,
+                sizeInBytes = 10,
                 peerCount = 0,
                 seedCount = 0
             )
@@ -95,6 +99,7 @@ class HomeViewModelTest : BaseUnitTest() {
                 magneticUrl = "",
                 hasAd = true,
                 peerCount = 0,
+                sizeInBytes = 10,
                 seedCount = 0
             ),
             hdTorrent = MovieTorrent(
@@ -104,6 +109,7 @@ class HomeViewModelTest : BaseUnitTest() {
                 magneticUrl = "",
                 hasAd = false,
                 peerCount = 0,
+                sizeInBytes = 10,
                 seedCount = 0
             )
         )
