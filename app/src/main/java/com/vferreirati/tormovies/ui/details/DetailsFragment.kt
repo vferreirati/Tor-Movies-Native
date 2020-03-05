@@ -1,10 +1,15 @@
 package com.vferreirati.tormovies.ui.details
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.os.StatFs
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -18,11 +23,9 @@ import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.vferreirati.tormovies.R
 import com.vferreirati.tormovies.data.presentation.MovieTorrent
+import com.vferreirati.tormovies.ui.dialog.PreparingStreamDialog
 import com.vferreirati.tormovies.ui.dialog.SelectQualityDialog
-import com.vferreirati.tormovies.utils.getDefaultRequest
-import com.vferreirati.tormovies.utils.gone
-import com.vferreirati.tormovies.utils.injector
-import com.vferreirati.tormovies.utils.visible
+import com.vferreirati.tormovies.utils.*
 import kotlinx.android.synthetic.main.fragment_details.*
 
 
@@ -31,6 +34,8 @@ class DetailsFragment : Fragment(R.layout.fragment_details), TorrentListener {
     private val args: DetailsFragmentArgs by navArgs()
     private val picasso by lazy { injector.picasso }
     private lateinit var rewardedAd: RewardedAd
+    private var currentStream: TorrentStream? = null
+    private var streamingDialog: PreparingStreamDialog? = null
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -41,6 +46,18 @@ class DetailsFragment : Fragment(R.layout.fragment_details), TorrentListener {
     override fun onResume() {
         super.onResume()
         loadRewardedAd()
+        currentStream?.stopStream()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            REQUEST_WRITE_STORAGE -> onWatchTorrent()
+            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        }
     }
 
     private fun initUi() {
@@ -115,11 +132,12 @@ class DetailsFragment : Fragment(R.layout.fragment_details), TorrentListener {
     private fun onDownloadTorrent() {
         val torrentList = getTorrentList()
 
-        val intent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(torrentList.first().magneticUrl) }
+        val intent =
+            Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(torrentList.first().magneticUrl) }
         val resolve = intent.resolveActivity(requireActivity().packageManager)
         if (resolve != null) {
-            SelectQualityDialog(torrentList, rewardedAd) { torrentUrl ->
-                startActivity(Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(torrentUrl) })
+            SelectQualityDialog(torrentList, rewardedAd) { torrent ->
+                startActivity(Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(torrent.magneticUrl) })
             }.show(requireActivity().supportFragmentManager, "SelectQualityDialog")
 
         } else {
@@ -132,18 +150,49 @@ class DetailsFragment : Fragment(R.layout.fragment_details), TorrentListener {
     }
 
     private fun onWatchTorrent() {
-        val torrentList = getTorrentList()
 
+        // Check storage permission
+        if (ContextCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestStoragePermission()
+            return
+        }
+
+        // Check if user can resolve video intent
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("mock.mp4"))
+        intent.setDataAndType(Uri.parse("mock.mp4"), "video/mp4")
+        val resolve = intent.resolveActivity(requireActivity().packageManager)
+        if (resolve == null) {
+            AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.error)
+                .setMessage(R.string.movie_player_not_found)
+                .setPositiveButton(R.string.ok) { d, _ -> d.dismiss() }
+                .show()
+        }
+
+        val torrentList = getTorrentList()
+        SelectQualityDialog(torrentList, rewardedAd) run@{ torrent ->
+            startStream(torrent.magneticUrl)
+        }.show(requireActivity().supportFragmentManager, "SelectQualityDialog")
+    }
+
+    private fun startStream(torrentUrl: String) {
         val options = TorrentOptions.Builder()
             .removeFilesAfterStop(true)
             .autoDownload(true)
             .saveLocation(requireActivity().externalCacheDir)
             .build()
-        val stream = TorrentStream.init(options).apply { addListener(this@DetailsFragment) }
-        stream.startStream(torrentList.first().magneticUrl)
+        currentStream = TorrentStream.init(options).apply { addListener(this@DetailsFragment) }
+        currentStream?.startStream(torrentUrl)
+
+        streamingDialog = PreparingStreamDialog() { currentStream?.stopStream() }
+        streamingDialog?.show(requireActivity().supportFragmentManager, "PreparingStreamDialog")
     }
 
-    private fun getTorrentList() : List<MovieTorrent> {
+    private fun getTorrentList(): List<MovieTorrent> {
         val movie = args.movieEntry
         val torrentList = mutableListOf<MovieTorrent>()
         movie.hdTorrent?.let { torrentList.add(it) }
@@ -152,8 +201,17 @@ class DetailsFragment : Fragment(R.layout.fragment_details), TorrentListener {
         return torrentList
     }
 
+    private fun requestStoragePermission() {
+        requestPermissions(
+            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+            REQUEST_WRITE_STORAGE
+        )
+    }
+
     override fun onStreamReady(torrent: Torrent?) {
         Log.d("TorMoviesLog", "onStreamReady: ${torrent!!.videoFile}")
+
+        streamingDialog?.dismiss()
 
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(torrent.videoFile.toString()))
         intent.setDataAndType(Uri.parse(torrent.videoFile.toString()), "video/mp4")
@@ -166,6 +224,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details), TorrentListener {
 
     override fun onStreamStopped() {
         Log.d("TorMoviesLog", "onStreamStopped")
+        streamingDialog?.dismiss()
     }
 
     override fun onStreamStarted(torrent: Torrent?) {
@@ -173,10 +232,18 @@ class DetailsFragment : Fragment(R.layout.fragment_details), TorrentListener {
     }
 
     override fun onStreamProgress(torrent: Torrent?, status: StreamStatus?) {
-        Log.d("TorMoviesLog", "Progress: ${status?.progress} | Speed: ${status?.downloadSpeed}" )
+        Log.d("TorMoviesLog", "Progress: ${status?.progress} | Speed: ${status?.downloadSpeed}")
+
+        streamingDialog?.updateDialog(getString(R.string.downloading_torrent), status?.downloadSpeed?.toMBytes()?.formatMBytes() ?: "", true)
     }
 
     override fun onStreamError(torrent: Torrent?, e: Exception?) {
         Log.e("TorMoviesLog", "Got error: $e")
+
+        // TODO: Show error message based on exception
+    }
+
+    companion object {
+        private const val REQUEST_WRITE_STORAGE = 100
     }
 }

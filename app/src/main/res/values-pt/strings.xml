@@ -28,4 +28,9 @@
     <string name="yes">sim</string>
     <string name="no">não</string>
     <string name="watch_now">Assistir agora</string>
+    <string name="preparing_stream">Preparando stream</string>
+    <string name="download_speed">Velocidade de download: %s</string>
+    <string name="downloading_torrent">Baixando torrent</string>
+    <string name="preparing_torrent_download">Preparando download do torrent</string>
+    <string name="movie_player_not_found">Seu dispositivo não possui um player de vídeo, instale um e tente novamente</string>
 </resources>

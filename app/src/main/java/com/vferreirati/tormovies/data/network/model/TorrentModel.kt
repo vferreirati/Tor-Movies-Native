@@ -7,5 +7,6 @@ data class TorrentModel(
     @Json(name = "seed") val seeders: Int,
     @Json(name = "peer") val peers: Int,
     @Json(name = "filesize") val fileSize: String,
+    @Json(name = "size") val sizeInBytes: Long,
     @Json(name = "provider") val source: String
 )

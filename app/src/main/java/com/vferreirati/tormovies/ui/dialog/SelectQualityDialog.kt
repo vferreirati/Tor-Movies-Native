@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.ads.rewarded.RewardItem
@@ -19,7 +18,7 @@ import kotlinx.android.synthetic.main.dialog_select_quality.*
 class SelectQualityDialog(
     private val torrents: List<MovieTorrent>,
     private val rewardedAd: RewardedAd,
-    private val onShowTorrent: (String) -> Unit
+    private val onShowTorrent: (MovieTorrent) -> Unit
 ) : DialogFragment() {
 
     private var userGotReward = false
@@ -43,14 +42,14 @@ class SelectQualityDialog(
 
     private fun onTorrentSelected(torrent: MovieTorrent) {
         if (torrent.hasAd) {
-            showAd(torrent.magneticUrl)
+            showAd(torrent)
         } else {
-            onShowTorrent(torrent.magneticUrl)
+            onShowTorrent(torrent)
         }
         dismiss()
     }
 
-    private fun showAd(torrentUrl: String) {
+    private fun showAd(torrent: MovieTorrent) {
         if (rewardedAd.isLoaded) {
             rewardedAd.show(activity, object: RewardedAdCallback() {
                 override fun onUserEarnedReward(item: RewardItem) {
@@ -65,7 +64,7 @@ class SelectQualityDialog(
                 override fun onRewardedAdClosed() {
                     Log.v("SelectQualityDialog", "AD closed")
                     if (userGotReward)
-                        onShowTorrent(torrentUrl)
+                        onShowTorrent(torrent)
                 }
 
                 override fun onRewardedAdOpened() {
@@ -73,7 +72,7 @@ class SelectQualityDialog(
                 }
             })
         } else {
-            onShowTorrent(torrentUrl)
+            onShowTorrent(torrent)
         }
     }
 }

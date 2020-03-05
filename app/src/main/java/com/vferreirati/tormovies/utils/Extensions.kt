@@ -86,4 +86,12 @@ fun AppCompatEditText.addDebouncedTextListener(
     }
 })
 
+fun Float.toMBytes(): Float {
+    val mbytesSize = 1024L * 1024L
+
+    return this / mbytesSize
+}
+
+fun Float.formatMBytes(): String = "%.2f MB/s".format(this)
+
 fun getDefaultRequest(): AdRequest = AdRequest.Builder().addTestDevice("11A8B1813CA154DBAFFF51CCF5584D50").build()

@@ -10,6 +10,7 @@ data class MovieTorrent(
     val seedCount: Int,
     val peerCount: Int,
     val fileSize: String,
+    val sizeInBytes: Long,
     val source: String,
     val hasAd: Boolean
 ): Parcelable

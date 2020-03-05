@@ -62,6 +62,7 @@ class MoviesRepository @Inject constructor(
         return MovieTorrent(
             quality = quality,
             fileSize = tor.fileSize,
+            sizeInBytes = tor.sizeInBytes,
             magneticUrl = tor.magneticUrl,
             peerCount = tor.peers,
             seedCount = tor.seeders,
