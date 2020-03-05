@@ -5,14 +5,14 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.os.StatFs
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.frostwire.jlibtorrent.TorrentStats
+import com.frostwire.jlibtorrent.TorrentStatus
 import com.github.se_bastiaan.torrentstream.StreamStatus
 import com.github.se_bastiaan.torrentstream.Torrent
 import com.github.se_bastiaan.torrentstream.TorrentOptions
@@ -212,6 +212,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details), TorrentListener {
         Log.d("TorMoviesLog", "onStreamReady: ${torrent!!.videoFile}")
 
         streamingDialog?.dismiss()
+        streamingDialog = null
 
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(torrent.videoFile.toString()))
         intent.setDataAndType(Uri.parse(torrent.videoFile.toString()), "video/mp4")
