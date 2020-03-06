@@ -33,4 +33,5 @@
     <string name="downloading_torrent">Downloading torrent</string>
     <string name="preparing_torrent_download">Preparing torrent download</string>
     <string name="movie_player_not_found">Your device doesn\'t have a video player, please install one and try again</string>
+    <string name="torrent_download_notification_channel">Torrent download notification channel</string>
 </resources>

@@ -1,28 +1,29 @@
 package com.vferreirati.tormovies.ui.details
 
 import android.Manifest
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.IBinder
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.frostwire.jlibtorrent.TorrentStats
-import com.frostwire.jlibtorrent.TorrentStatus
 import com.github.se_bastiaan.torrentstream.StreamStatus
 import com.github.se_bastiaan.torrentstream.Torrent
-import com.github.se_bastiaan.torrentstream.TorrentOptions
-import com.github.se_bastiaan.torrentstream.TorrentStream
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.vferreirati.tormovies.R
 import com.vferreirati.tormovies.data.presentation.MovieTorrent
+import com.vferreirati.tormovies.data.services.TorrentDownloadForegroundService
 import com.vferreirati.tormovies.ui.dialog.PreparingStreamDialog
 import com.vferreirati.tormovies.ui.dialog.SelectQualityDialog
 import com.vferreirati.tormovies.utils.*
@@ -34,8 +35,18 @@ class DetailsFragment : Fragment(R.layout.fragment_details), TorrentListener {
     private val args: DetailsFragmentArgs by navArgs()
     private val picasso by lazy { injector.picasso }
     private lateinit var rewardedAd: RewardedAd
-    private var currentStream: TorrentStream? = null
     private var streamingDialog: PreparingStreamDialog? = null
+
+    private val bindConnection = object : ServiceConnection {
+        override fun onServiceDisconnected(p0: ComponentName?) {
+
+        }
+
+        override fun onServiceConnected(className: ComponentName?, serviceBinder: IBinder?) {
+            val bind = serviceBinder as TorrentDownloadForegroundService.TorrentBinder
+            bind.addTorrentListener(this@DetailsFragment)
+        }
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -46,7 +57,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details), TorrentListener {
     override fun onResume() {
         super.onResume()
         loadRewardedAd()
-        currentStream?.stopStream()
+        stopDownloadService()
     }
 
     override fun onRequestPermissionsResult(
@@ -180,16 +191,18 @@ class DetailsFragment : Fragment(R.layout.fragment_details), TorrentListener {
     }
 
     private fun startStream(torrentUrl: String) {
-        val options = TorrentOptions.Builder()
-            .removeFilesAfterStop(true)
-            .autoDownload(true)
-            .saveLocation(requireActivity().externalCacheDir)
-            .build()
-        currentStream = TorrentStream.init(options).apply { addListener(this@DetailsFragment) }
-        currentStream?.startStream(torrentUrl)
+        val intent = Intent(requireActivity(), TorrentDownloadForegroundService::class.java).apply {
+            putExtra(TorrentDownloadForegroundService.TORRENT_URL_KEY, torrentUrl)
+        }
+        ContextCompat.startForegroundService(requireContext(), intent)
+        requireActivity().bindService(intent, bindConnection, Context.BIND_AUTO_CREATE)
 
-        streamingDialog = PreparingStreamDialog() { currentStream?.stopStream() }
+        streamingDialog = PreparingStreamDialog() { stopDownloadService() }
         streamingDialog?.show(requireActivity().supportFragmentManager, "PreparingStreamDialog")
+    }
+
+    private fun stopDownloadService() {
+        requireActivity().stopService(Intent(requireActivity(), TorrentDownloadForegroundService::class.java))
     }
 
     private fun getTorrentList(): List<MovieTorrent> {
@@ -209,12 +222,10 @@ class DetailsFragment : Fragment(R.layout.fragment_details), TorrentListener {
     }
 
     override fun onStreamReady(torrent: Torrent?) {
-        Log.d("TorMoviesLog", "onStreamReady: ${torrent!!.videoFile}")
-
         streamingDialog?.dismiss()
         streamingDialog = null
 
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(torrent.videoFile.toString()))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(torrent!!.videoFile.toString()))
         intent.setDataAndType(Uri.parse(torrent.videoFile.toString()), "video/mp4")
         startActivity(intent)
     }
@@ -224,23 +235,17 @@ class DetailsFragment : Fragment(R.layout.fragment_details), TorrentListener {
     }
 
     override fun onStreamStopped() {
-        Log.d("TorMoviesLog", "onStreamStopped")
         streamingDialog?.dismiss()
     }
 
     override fun onStreamStarted(torrent: Torrent?) {
-        Log.d("TorMoviesLog", "onStreamStarted")
     }
 
     override fun onStreamProgress(torrent: Torrent?, status: StreamStatus?) {
-        Log.d("TorMoviesLog", "Progress: ${status?.progress} | Speed: ${status?.downloadSpeed}")
-
         streamingDialog?.updateDialog(getString(R.string.downloading_torrent), status?.downloadSpeed?.toMBytes()?.formatMBytes() ?: "", true)
     }
 
     override fun onStreamError(torrent: Torrent?, e: Exception?) {
-        Log.e("TorMoviesLog", "Got error: $e")
-
         // TODO: Show error message based on exception
     }
 

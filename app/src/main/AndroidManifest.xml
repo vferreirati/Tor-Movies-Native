@@ -4,7 +4,8 @@
     package="com.vferreirati.tormovies">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".TorApplication"
@@ -13,11 +14,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <service
+            android:name=".data.services.TorrentDownloadForegroundService"
+            android:enabled="true" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-8404166360433487~1369175730"/>
+            android:value="ca-app-pub-8404166360433487~1369175730" />
         <activity
             android:name=".ui.MainActivity"
             android:screenOrientation="portrait"
