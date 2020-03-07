@@ -66,7 +66,12 @@ class DetailsFragment : Fragment(R.layout.fragment_details), TorrentListener {
         grantResults: IntArray
     ) {
         when (requestCode) {
-            REQUEST_WRITE_STORAGE -> onWatchTorrent()
+            REQUEST_WRITE_STORAGE -> {
+                if (grantResults.isNotEmpty() && grantResults.first() == PackageManager.PERMISSION_GRANTED)
+                    onWatchTorrent()
+                else
+                    showPermissionNotGrantedDialog()
+            }
             else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
     }
@@ -228,6 +233,14 @@ class DetailsFragment : Fragment(R.layout.fragment_details), TorrentListener {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(torrent!!.videoFile.toString()))
         intent.setDataAndType(Uri.parse(torrent.videoFile.toString()), "video/mp4")
         startActivity(intent)
+    }
+
+    private fun showPermissionNotGrantedDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.storage_permission_necessary_title))
+            .setMessage(getString(R.string.storage_permission_necessary_message))
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 
     override fun onStreamPrepared(torrent: Torrent?) {

@@ -34,4 +34,6 @@
     <string name="preparing_torrent_download">Preparando download do torrent</string>
     <string name="movie_player_not_found">Seu dispositivo não possui um player de vídeo, instale um e tente novamente</string>
     <string name="torrent_download_notification_channel">Canal de notificações de download de torrents</string>
+    <string name="storage_permission_necessary_title">Permissão de acesso ao armazenamento</string>
+    <string name="storage_permission_necessary_message">Precisamos da permissão de acesso ao armazenamento para realizar o download do arquivo torrent e reproduzir em um player de vídeo</string>
 </resources>

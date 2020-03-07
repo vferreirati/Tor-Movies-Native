@@ -34,4 +34,6 @@
     <string name="preparing_torrent_download">Preparing torrent download</string>
     <string name="movie_player_not_found">Your device doesn\'t have a video player, please install one and try again</string>
     <string name="torrent_download_notification_channel">Torrent download notification channel</string>
+    <string name="storage_permission_necessary_title">Storage permission necessary</string>
+    <string name="storage_permission_necessary_message">The storage permission is necessary to download the torrent file and play it with a video player</string>
 </resources>
