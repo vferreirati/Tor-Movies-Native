@@ -2,9 +2,7 @@ package com.vferreirati.tormovies.di
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.vferreirati.tormovies.data.network.services.MoviesService
 import com.vferreirati.tormovies.data.network.services.YtsMoviesService
-import com.vferreirati.tormovies.utils.API_URL
 import com.vferreirati.tormovies.utils.YTS_API_URL
 import dagger.Module
 import dagger.Provides
@@ -39,10 +37,6 @@ object RemoteModule {
     fun moshi(): Moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
         .build()
-
-    @Provides
-    @Singleton
-    fun moviesService(retrofit: Retrofit): MoviesService = retrofit.create(MoviesService::class.java)
 
     @Provides
     @Singleton
