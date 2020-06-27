@@ -5,53 +5,20 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.viewModels
 import androidx.appcompat.widget.AppCompatEditText
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.coroutineScope
 import com.google.android.gms.ads.AdRequest
-import com.vferreirati.tormovies.TorApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
-/**
- * Método de extensão para obter o componente da aplicação
- * */
-val Activity.injector get() = (application as TorApplication).applicationComponent
-
-val Fragment.injector get() = activity!!.injector
-
-/**
- * Método de entexão para obter o [ViewModel] com escopo de [Activity] através de DI
- * */
-@Suppress("UNCHECKED_CAST")
-inline fun <reified T : ViewModel> FragmentActivity.viewModel(
-    crossinline provider: () -> T
-) = viewModels<T> {
-    object : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T = provider() as T
-    }
-}
-
-/**
- * Método de entexão para obter determinado [ViewModel] com escopo de [Fragment] através de DI
- * */
-@Suppress("UNCHECKED_CAST")
-inline fun <reified T : ViewModel> Fragment.viewModel(
-    crossinline provider: () -> T
-) = viewModels<T> {
-    object : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T = provider() as T
-    }
-}
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 
 fun View.gone() {
     this.visibility = View.GONE
@@ -87,9 +54,43 @@ fun AppCompatEditText.addDebouncedTextListener(
     }
 })
 
-fun getDefaultRequest(): AdRequest = AdRequest.Builder().addTestDevice("11A8B1813CA154DBAFFF51CCF5584D50").build()
+fun getDefaultRequest(): AdRequest = AdRequest.Builder().build()
 
 fun Fragment.hideKeyboard() {
     val imm = requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(view?.rootView?.windowToken, 0)
+}
+
+/**
+ * Gets the value of a [LiveData] or waits for it to have one, with a timeout.
+ *
+ * Use this extension from host-side (JVM) tests. It's recommended to use it alongside
+ * `InstantTaskExecutorRule` or a similar mechanism to execute tasks synchronously.
+ */
+fun <T> LiveData<T>.getOrAwaitValue(
+    time: Long = 2,
+    timeUnit: TimeUnit = TimeUnit.SECONDS,
+    afterObserve: () -> Unit = {}
+): T {
+    var data: T? = null
+    val latch = CountDownLatch(1)
+    val observer = object : Observer<T> {
+        override fun onChanged(o: T?) {
+            data = o
+            latch.countDown()
+            this@getOrAwaitValue.removeObserver(this)
+        }
+    }
+    this.observeForever(observer)
+
+    afterObserve.invoke()
+
+    // Don't wait indefinitely if the LiveData is not set.
+    if (!latch.await(time, timeUnit)) {
+        this.removeObserver(observer)
+        throw TimeoutException("LiveData value was never set.")
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    return data as T
 }

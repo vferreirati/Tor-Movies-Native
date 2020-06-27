@@ -1,6 +1,10 @@
 package com.vferreirati.tormovies.ui.home
 
-import androidx.lifecycle.*
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.vferreirati.tormovies.R
 import com.vferreirati.tormovies.data.enums.SortBy
 import com.vferreirati.tormovies.data.presentation.MovieEntry
@@ -10,9 +14,8 @@ import com.vferreirati.tormovies.utils.Failure
 import com.vferreirati.tormovies.utils.SingleLiveEvent
 import com.vferreirati.tormovies.utils.Success
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class HomeViewModel @Inject constructor(
+class HomeViewModel @ViewModelInject constructor(
     private val moviesRepository: MoviesRepository
 ) : ViewModel() {
 

@@ -3,6 +3,7 @@ package com.vferreirati.tormovies.ui.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,14 +14,21 @@ import com.vferreirati.tormovies.data.presentation.MovieEntry
 import com.vferreirati.tormovies.ui.adapter.MovieAdapter
 import com.vferreirati.tormovies.ui.adapter.ShimmerAdapter
 import com.vferreirati.tormovies.utils.*
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home), MovieAdapter.MovieCallback {
 
-    private val viewModel by viewModel { injector.homeViewModel }
-    private val adapterTrendingMovies by lazy { injector.movieAdapter }
-    private val adapterNewMovies by lazy { injector.movieAdapter }
+    @Inject
+    lateinit var adapterTrendingMovies: MovieAdapter
+
+    @Inject
+    lateinit var adapterNewMovies: MovieAdapter
+
+    private val viewModel: HomeViewModel by viewModels()
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

@@ -9,22 +9,24 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.squareup.picasso.Picasso
 import com.vferreirati.tormovies.R
 import com.vferreirati.tormovies.data.presentation.MovieTorrent
 import com.vferreirati.tormovies.ui.dialog.SelectQualityDialog
 import com.vferreirati.tormovies.utils.getDefaultRequest
 import com.vferreirati.tormovies.utils.gone
-import com.vferreirati.tormovies.utils.injector
 import com.vferreirati.tormovies.utils.visible
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_details.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class DetailsFragment : Fragment(R.layout.fragment_details) {
 
+    @Inject lateinit var picasso: Picasso
     private val args: DetailsFragmentArgs by navArgs()
-    private val picasso by lazy { injector.picasso }
     private lateinit var rewardedAd: RewardedAd
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -113,14 +115,14 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         movie.fullHdTorrent?.let { torrentList.add(it) }
 
         val intent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(torrentList.first().magneticUrl) }
-        val resolve = intent.resolveActivity(activity!!.packageManager)
+        val resolve = intent.resolveActivity(requireActivity().packageManager)
         if (resolve != null) {
             SelectQualityDialog(torrentList, rewardedAd) { torrentUrl ->
                 startActivity(Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(torrentUrl) })
-            }.show(activity!!.supportFragmentManager, "SelectQualityDialog")
+            }.show(requireActivity().supportFragmentManager, "SelectQualityDialog")
 
         } else {
-            AlertDialog.Builder(context!!)
+            AlertDialog.Builder(requireContext())
                 .setTitle(R.string.error)
                 .setMessage(R.string.error_opening_torrent_client)
                 .setPositiveButton(R.string.ok) { d, _ -> d.dismiss() }
