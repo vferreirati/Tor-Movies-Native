@@ -13,7 +13,7 @@
     <string name="genre">Gênero</string>
     <string name="release_year">Ano de lançamento</string>
     <string name="not_available">Não informado</string>
-    <string name="duration_with_minutes">%s minutos</string>
+    <string name="duration_with_minutes">%d minutos</string>
     <string name="choose_quality">Escolha a qualidade</string>
     <string name="seed">Seed:</string>
     <string name="peer">Peer:</string>

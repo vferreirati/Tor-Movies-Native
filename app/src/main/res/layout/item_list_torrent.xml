@@ -22,13 +22,6 @@
             android:layout_height="wrap_content"
             tools:text="720p" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/txtTorrentSource"
-            style="@style/TorrentInfoLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="YTS" />
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,28 +40,6 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 tools:text="1.26GB" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                style="@style/TorrentInfoLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:text="@string/ad_to_download" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/txtHasAd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAllCaps="true"
-                android:textColor="@android:color/white"
-                tools:text="YES" />
 
         </LinearLayout>
 

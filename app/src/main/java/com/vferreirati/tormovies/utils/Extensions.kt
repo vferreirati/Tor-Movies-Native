@@ -94,3 +94,5 @@ fun <T> LiveData<T>.getOrAwaitValue(
     @Suppress("UNCHECKED_CAST")
     return data as T
 }
+
+fun String.asYoutubeUrl() = "https://www.youtube.com/watch?v=$this"

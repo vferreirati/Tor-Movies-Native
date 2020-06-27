@@ -13,8 +13,8 @@ import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.squareup.picasso.Picasso
 import com.vferreirati.tormovies.R
-import com.vferreirati.tormovies.data.presentation.MovieTorrent
 import com.vferreirati.tormovies.ui.dialog.SelectQualityDialog
+import com.vferreirati.tormovies.utils.asYoutubeUrl
 import com.vferreirati.tormovies.utils.getDefaultRequest
 import com.vferreirati.tormovies.utils.gone
 import com.vferreirati.tormovies.utils.visible
@@ -43,17 +43,15 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     private fun initUi() {
         val movie = args.movieEntry
 
-        movie.images.bannerUrl?.let { url ->
-            picasso.load(url).placeholder(R.drawable.placeholder_movie_poster).into(imgMoviePoster)
-        }
+        picasso.load(movie.posterImageUrl).placeholder(R.drawable.placeholder_movie_poster).into(imgMoviePoster)
 
         btnUp.setOnClickListener { findNavController().navigateUp() }
 
-        if (movie.youtubeTrailerUrl != null) {
+        if (movie.youtubeTrailerCode?.isNotEmpty() == true) {
             btnYoutube.visible()
             btnYoutube.setOnClickListener {
                 startActivity(Intent(Intent.ACTION_VIEW).apply {
-                    data = Uri.parse(movie.youtubeTrailerUrl)
+                    data = Uri.parse(movie.youtubeTrailerCode.asYoutubeUrl())
                 })
             }
         } else {
@@ -62,16 +60,10 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
 
         txtMovieName.text = movie.title
         txtMovieSynopsis.text = movie.synopsis
-        txtMovieReleaseYear.text = movie.year ?: getString(R.string.not_available)
+        txtMovieReleaseYear.text = movie.year.toString()
 
-        if (movie.durationInMinutes != null) {
-            txtMovieDuration.text =
-                getString(R.string.duration_with_minutes, movie.durationInMinutes)
-        } else {
-            txtMovieDuration.text = getString(R.string.not_available)
-        }
+        txtMovieDuration.text = getString(R.string.duration_with_minutes, movie.durationInMinutes)
 
-        txtMovieReleaseYear.text = movie.year ?: getString(R.string.not_available)
         val genresBuilder = StringBuilder()
         movie.genres.forEachIndexed { index, s ->
             genresBuilder.append(s)
@@ -110,14 +102,11 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
 
     private fun onDownloadTorrent() {
         val movie = args.movieEntry
-        val torrentList = mutableListOf<MovieTorrent>()
-        movie.hdTorrent?.let { torrentList.add(it) }
-        movie.fullHdTorrent?.let { torrentList.add(it) }
 
-        val intent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(torrentList.first().magneticUrl) }
+        val intent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(movie.torrents.first().magneticUrl) }
         val resolve = intent.resolveActivity(requireActivity().packageManager)
         if (resolve != null) {
-            SelectQualityDialog(torrentList, rewardedAd) { torrentUrl ->
+            SelectQualityDialog(movie.torrents, rewardedAd) { torrentUrl ->
                 startActivity(Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(torrentUrl) })
             }.show(requireActivity().supportFragmentManager, "SelectQualityDialog")
 
