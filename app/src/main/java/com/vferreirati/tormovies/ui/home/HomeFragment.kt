@@ -88,7 +88,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), MovieAdapter.MovieCallbac
         findNavController().navigate(
             HomeFragmentDirections.actionHomeFragmentToSearchFragment(
                 entries.toTypedArray(),
-                SortBy.LAST_ADDED
+                SortBy.DATE_ADDED
             )
         )
     }
@@ -97,7 +97,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), MovieAdapter.MovieCallbac
         findNavController().navigate(
             HomeFragmentDirections.actionHomeFragmentToSearchFragment(
                 entries.toTypedArray(),
-                SortBy.TRENDING
+                SortBy.DOWNLOAD_COUNT
             )
         )
     }
@@ -121,7 +121,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), MovieAdapter.MovieCallbac
         findNavController().navigate(
             HomeFragmentDirections.actionHomeFragmentToSearchFragment(
                 movies.toTypedArray(),
-                SortBy.TRENDING
+                SortBy.DOWNLOAD_COUNT
             )
         )
     }

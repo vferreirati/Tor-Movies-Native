@@ -29,8 +29,8 @@ class HomeViewModel @ViewModelInject constructor(
             try {
                 _homeState.postValue(LoadingMovies)
 
-                val trendingMovies = moviesRepository.queryMovies(sortBy = SortBy.TRENDING)
-                val mostRecent = moviesRepository.queryMovies(sortBy = SortBy.LAST_ADDED)
+                val trendingMovies = moviesRepository.queryMovies(sortBy = SortBy.DOWNLOAD_COUNT)
+                val mostRecent = moviesRepository.queryMovies(sortBy = SortBy.DATE_ADDED)
 
                 _homeState.postValue(MoviesLoaded(trendingMovies = trendingMovies, mostRecentMovies = mostRecent))
             } catch (t: Throwable) {
@@ -45,7 +45,7 @@ class HomeViewModel @ViewModelInject constructor(
 
         viewModelScope.launch {
             try {
-                val moviesResult = moviesRepository.queryMovies(keywords = query, sortBy = SortBy.TRENDING)
+                val moviesResult = moviesRepository.queryMovies(keywords = query, sortBy = SortBy.DOWNLOAD_COUNT)
                 if (moviesResult.isEmpty()) {
                     result.value = Failure(R.string.error_query_no_result)
 

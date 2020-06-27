@@ -51,10 +51,9 @@ class MovieSearchAdapter @Inject constructor(
             val movieHolder = holder as MovieSearchHolder
             val entry = entries[getRealPosition(position)]
 
-            entry.images.posterUrl?.let { url -> picasso.load(url)
+            picasso.load(entry.posterImageUrl)
                 .placeholder(R.drawable.placeholder_movie_poster)
                 .into(movieHolder.imgMoviePoster)
-            }
 
             holder.itemView.setOnClickListener { callback.onMovieSelected(entry) }
         }
