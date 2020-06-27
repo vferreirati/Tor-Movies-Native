@@ -4,7 +4,7 @@ package com.vferreirati.tormovies.ui.home
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -36,16 +36,16 @@ class HomeFragment : Fragment(R.layout.fragment_home), MovieAdapter.MovieCallbac
         initUI()
         adapterTrendingMovies.setCallback(this)
         adapterNewMovies.setCallback(this)
-        viewModel.homeState.observe(viewLifecycleOwner, Observer { state -> mapStateToUi(state) })
+        viewModel.homeState.observe(viewLifecycleOwner) { mapStateToUi(it) }
     }
 
     private fun initUI() {
         etMovieSearchBar.addDebouncedTextListener(1000L, lifecycle) { query ->
             pbSearch.visible()
-            viewModel.onSearchMovies(query).observe(viewLifecycleOwner, Observer { state ->
+            viewModel.onSearchMovies(query).observe(viewLifecycleOwner) { state ->
                 mapSearchState(state)
                 etMovieSearchBar.setText("")
-            })
+            }
         }
     }
 

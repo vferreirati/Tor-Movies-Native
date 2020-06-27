@@ -14,6 +14,7 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.squareup.picasso.Picasso
 import com.vferreirati.tormovies.R
 import com.vferreirati.tormovies.ui.dialog.SelectQualityDialog
+import com.vferreirati.tormovies.utils.asYoutubeUrl
 import com.vferreirati.tormovies.utils.getDefaultRequest
 import com.vferreirati.tormovies.utils.gone
 import com.vferreirati.tormovies.utils.visible
@@ -46,12 +47,11 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
 
         btnUp.setOnClickListener { findNavController().navigateUp() }
 
-        // TODO: Add remaining bits of url to youtube trailer code
-        if (movie.youtubeTrailerCode != null) {
+        if (movie.youtubeTrailerCode?.isNotEmpty() == true) {
             btnYoutube.visible()
             btnYoutube.setOnClickListener {
                 startActivity(Intent(Intent.ACTION_VIEW).apply {
-                    data = Uri.parse(movie.youtubeTrailerCode)
+                    data = Uri.parse(movie.youtubeTrailerCode.asYoutubeUrl())
                 })
             }
         } else {
