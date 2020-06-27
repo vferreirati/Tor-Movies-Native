@@ -1,19 +1,23 @@
-package com.vferreirati.tormovies.di.modules
+package com.vferreirati.tormovies.di
 
 import android.content.Context
 import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
-import com.vferreirati.tormovies.di.scopes.ApplicationScope
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Singleton
 
 @Module(includes = [NetworkModule::class])
+@InstallIn(ApplicationComponent::class)
 object ImageModule {
 
     @Provides
-    @ApplicationScope
+    @Singleton
     fun picasso(
-        context: Context,
+        @ApplicationContext context: Context,
         downloader: OkHttp3Downloader
     ): Picasso = Picasso.Builder(context)
         .downloader(downloader)

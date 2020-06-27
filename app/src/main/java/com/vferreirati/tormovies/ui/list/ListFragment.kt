@@ -11,14 +11,16 @@ import com.vferreirati.tormovies.R
 import com.vferreirati.tormovies.data.presentation.MovieEntry
 import com.vferreirati.tormovies.ui.adapter.MovieAdapter
 import com.vferreirati.tormovies.ui.adapter.MovieSearchAdapter
-import com.vferreirati.tormovies.utils.injector
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_list.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ListFragment : Fragment(R.layout.fragment_list), MovieAdapter.MovieCallback {
 
-    private val args: ListFragmentArgs by navArgs()
+    @Inject lateinit var adapter: MovieSearchAdapter
 
-    private val adapter: MovieSearchAdapter by lazy { injector.movieSearchAdapter }
+    private val args: ListFragmentArgs by navArgs()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
